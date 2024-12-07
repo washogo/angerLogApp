@@ -1,0 +1,22 @@
+@startuml pageAngerLogInsert
+title "アンガーログ登録画面表示"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+
+ユーザー -> ブラウザ: メニュー・アンガーログ登録クリック
+ブラウザ -> Next.js: アンガーログ登録画面表示要求
+Next.js -> Supabase: 作業種別取得クエリ実行
+Supabase -> PostgreSQL: 作業種別取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> Supabase: 作業内容取得クエリ実行
+Supabase -> PostgreSQL: 作業内容取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> ブラウザ: アンガーログ登録画面表示
+
+@enduml

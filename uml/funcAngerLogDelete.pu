@@ -1,0 +1,35 @@
+@startuml funcAngerLogDelete 
+title "アンガーログ削除"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+participant ホーム画面
+
+ユーザー -> ブラウザ: 怒り記録対象削除
+ブラウザ -> Next.js: 怒り記録削除対象送信
+Next.js -> Supabase: 怒り記録削除リクエスト
+Supabase -> PostgreSQL: 怒り記録データ削除
+PostgreSQL -> Supabase: 削除結果返却
+Supabase -> Next.js: 削除結果返却
+Next.js -> Supabase: 日次集計データ取得リクエスト
+Supabase -> PostgreSQL: 日次集計結果データ取得
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> Supabase: 日次集計データ更新リクエスト
+Supabase -> PostgreSQL: 日次集計結果データ更新
+PostgreSQL -> Supabase: 更新結果返却
+Supabase -> Next.js: 更新結果返却
+Next.js -> Supabase: 月次集計データ取得リクエスト
+Supabase -> PostgreSQL: 月次集計結果データ取得
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> Supabase: 月次集計データ更新リクエスト
+Supabase -> PostgreSQL: 月次集計結果データ更新
+PostgreSQL -> Supabase: 更新結果返却
+Supabase -> Next.js: 更新結果返却
+Next.js -> ブラウザ: 削除完了
+ブラウザ -> ホーム画面: リダイレクト
+@enduml

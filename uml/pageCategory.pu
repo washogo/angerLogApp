@@ -1,0 +1,18 @@
+@startuml pageAngerLogDetail
+title "作業内容一覧画面表示"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+
+ユーザー -> ブラウザ: メニュー・作業内容一覧をクリック
+ブラウザ -> Next.js: 作業内容一覧画面表示要求
+Next.js -> Supabase: 作業内容取得クエリ実行
+Supabase -> PostgreSQL: 作業内容取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> ブラウザ: 作業内容一覧画面表示
+
+@enduml

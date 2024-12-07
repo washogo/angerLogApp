@@ -1,0 +1,23 @@
+@startuml funcLogin
+title "ログイン"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+
+ユーザー -> ブラウザ: ログイン情報入力
+ブラウザ -> Next.js: ログイン情報送信
+Next.js -> Supabase: 認証リクエスト
+Supabase -> PostgreSQL: ユーザー情報検索
+PostgreSQL -> Supabase: 認証結果返却
+alt 認証成功
+    Supabase -> Next.js: 認証成功
+    Next.js -> ブラウザ: セッションID送信
+    ブラウザ -> ホーム画面: リダイレクト
+else 認証失敗
+    Supabase -> Next.js: 認証失敗
+    Next.js -> ブラウザ: エラーメッセージ
+end
+@enduml

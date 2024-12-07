@@ -1,0 +1,20 @@
+@startuml funcCategoryInsert
+title "作業内容の登録"
+
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+participant 作業内容一覧
+
+ユーザー -> ブラウザ: 作業内容入力
+ブラウザ -> Next.js: 作業内容送信
+Next.js -> Prisma: 作業内容登録リクエスト
+Prisma -> PostgreSQL: 作業内容データ挿入
+PostgreSQL -> Prisma: 挿入結果返却
+Prisma -> Next.js: 挿入結果返却
+Next.js -> ブラウザ: 登録完了
+ブラウザ -> 作業内容一覧: リダイレクト
+@enduml

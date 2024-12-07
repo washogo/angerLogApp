@@ -1,0 +1,24 @@
+@startuml pageHome
+title "ホーム画面表示"
+participant 各メニュー
+participant ホーム画面
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+
+各メニュー -> ホーム画面: リダイレクト
+ホーム画面 -> ブラウザ: 集計要求
+ブラウザ -> Next.js: 集計要求送信
+Next.js -> Supabase: 集計クエリ実行
+Supabase -> PostgreSQL: 集計クエリ実行
+PostgreSQL -> Supabase: 集計結果返却
+Supabase -> Next.js: 集計結果返却
+Next.js -> Supabase: アンガーログ情報取得クエリ実行
+Supabase -> PostgreSQL: アンガーログ情報取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> ブラウザ: 集計データ、アンガーログ情報表示
+
+@enduml

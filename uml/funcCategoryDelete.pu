@@ -1,0 +1,19 @@
+@startuml funcCategoryDelete
+title "作業内容の削除"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+participant 作業内容一覧
+
+ユーザー -> ブラウザ: 対象削除ボタンクリック
+ブラウザ -> Next.js: 削除内容送信
+Next.js -> Prisma: 作業内容削除リクエスト
+Prisma -> PostgreSQL: 作業内容データ削除
+PostgreSQL -> Prisma: 削除結果返却
+Prisma -> Next.js: 削除結果返却
+Next.js -> ブラウザ: 削除完了
+ブラウザ -> 作業内容一覧: リダイレクト
+@enduml

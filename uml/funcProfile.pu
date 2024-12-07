@@ -1,0 +1,19 @@
+@startuml funcProfile
+title "プロフィール変更"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+participant ホーム画面
+
+ユーザー -> ブラウザ: プロフィール変更情報入力
+ブラウザ -> Next.js: プロフィール変更情報送信
+Next.js -> Prisma: ユーザー情報更新リクエスト
+Prisma -> PostgreSQL: ユーザー情報更新
+PostgreSQL -> Prisma: 更新結果返却
+Prisma -> Next.js: 更新結果返却
+Next.js -> ブラウザ: 更新完了メッセージ
+ブラウザ -> ホーム画面: リダイレクト
+@enduml

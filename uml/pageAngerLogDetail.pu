@@ -1,0 +1,26 @@
+@startuml pageAngerLogDetail
+title "アンガーログ詳細画面表示"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Prisma
+participant Supabase
+participant PostgreSQL
+
+ユーザー -> ブラウザ:対象のアンガーログ選択 
+ブラウザ -> Next.js: アンガーログ詳細画面表示要求
+Next.js -> Supabase: 作業種別取得クエリ実行
+Supabase -> PostgreSQL: 作業種別取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> Supabase: 作業内容取得クエリ実行
+Supabase -> PostgreSQL: 作業内容取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> Supabase: アンガーログ情報取得クエリ実行
+Supabase -> PostgreSQL: アンガーログ情報取得クエリ実行
+PostgreSQL -> Supabase: 取得結果返却
+Supabase -> Next.js: 取得結果返却
+Next.js -> ブラウザ: アンガーログ詳細画面表示
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml funcSignup
+title "サインアップ"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+participant Supabase
+participant PostgreSQL
+participant ホーム画面
+
+ユーザー -> ブラウザ: サインアップ情報入力
+ブラウザ -> Next.js: サインアップ情報送信
+Next.js -> Supabase: ユーザー登録リクエスト
+Supabase -> PostgreSQL: 新規ユーザー情報挿入
+alt 登録成功
+    PostgreSQL -> Supabase: 登録成功
+    Supabase -> Next.js: 登録成功
+    Next.js -> ブラウザ: 登録完了メッセージ
+    ブラウザ -> ホーム画面: リダイレクト
+else 登録失敗
+    PostgreSQL -> Supabase: 登録失敗
+    Supabase -> Next.js: 登録失敗
+    Next.js -> ブラウザ: エラーメッセージ
+end
+@enduml
