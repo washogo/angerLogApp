@@ -18,7 +18,17 @@
 
 ## 技術的な詳細
 * **フロントエンド:** React
+* **コンポーネントライブラリ** Material UI
 * **CSS:** tailwindcss
 * **フレームワーク:** Next.js (prisma, supabase)
 * **データベース:** PostgreSQL
 * **サーバー:** Vercel
+
+## 画面遷移図
+https://miro.com/app/board/uXjVL-f8D6g=/?share_link_id=116735043596
+
+## シーケンス図
+https://miro.com/app/board/uXjVL-b0PJo=/?share_link_id=154409797447
+
+## クラス図
+https://miro.com/app/board/uXjVL_UvboE=/?share_link_id=695136082928
