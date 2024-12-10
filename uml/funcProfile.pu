@@ -12,8 +12,14 @@ participant ホーム画面
 ブラウザ -> Next.js: プロフィール変更情報送信
 Next.js -> Prisma: ユーザー情報更新リクエスト
 Prisma -> PostgreSQL: ユーザー情報更新
-PostgreSQL -> Prisma: 更新結果返却
-Prisma -> Next.js: 更新結果返却
-Next.js -> ブラウザ: 更新完了メッセージ
-ブラウザ -> ホーム画面: リダイレクト
+alt 更新成功
+PostgreSQL -> Supabase: 更新成功
+  Supabase -> Next.js: 更新成功
+  Next.js -> ブラウザ: 更新完了メッセージ
+  ブラウザ -> ホーム画面: リダイレクト
+else 更新失敗
+  PostgreSQL -> Supabase: 更新失敗
+  Supabase -> Next.js: 更新失敗
+  Next.js -> ブラウザ: エラーメッセージ
+end
 @enduml

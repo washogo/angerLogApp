@@ -13,8 +13,15 @@ participant 作業内容一覧
 ブラウザ -> Next.js: 作業内容送信
 Next.js -> Prisma: 作業内容登録リクエスト
 Prisma -> PostgreSQL: 作業内容データ挿入
-PostgreSQL -> Prisma: 挿入結果返却
-Prisma -> Next.js: 挿入結果返却
-Next.js -> ブラウザ: 登録完了
+alt 登録成功
+PostgreSQL -> Supabase: 登録成功
+  Supabase -> Next.js: 登録成功
+  Next.js -> ブラウザ: 登録完了メッセージ
 ブラウザ -> 作業内容一覧: リダイレクト
+else 登録失敗
+  PostgreSQL -> Supabase: 登録失敗
+  Supabase -> Next.js: 登録失敗
+  Next.js -> ブラウザ: エラーメッセージ
+end
+
 @enduml

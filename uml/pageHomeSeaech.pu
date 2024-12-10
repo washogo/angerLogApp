@@ -1,5 +1,5 @@
-@startuml pageHome
-title "ホーム画面表示"
+@startuml pageHomeSeaech
+title "ホーム画面の表示処理"
 participant 各メニュー
 participant ホーム画面
 participant ブラウザ
@@ -9,13 +9,13 @@ participant Supabase
 participant PostgreSQL
 
 各メニュー -> ホーム画面: リダイレクト
-ホーム画面 -> ブラウザ: 当日の集計要求
+ホーム画面 -> ブラウザ: 対象日の集計要求
 ブラウザ -> Next.js: 集計要求送信
 Next.js -> Supabase: 集計クエリ実行
 Supabase -> PostgreSQL: 集計クエリ実行
 PostgreSQL -> Supabase: 集計結果返却
 Supabase -> Next.js: 集計結果返却
-Next.js -> Supabase: 当日のアンガーログ情報取得クエリ実行
+Next.js -> Supabase: 対象日のアンガーログ情報取得クエリ実行
 Supabase -> PostgreSQL: アンガーログ情報取得クエリ実行
 alt 処理成功
   PostgreSQL -> Supabase: 取得成功

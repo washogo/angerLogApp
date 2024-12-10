@@ -12,8 +12,14 @@ participant 作業内容一覧
 ブラウザ -> Next.js: 削除内容送信
 Next.js -> Prisma: 作業内容削除リクエスト
 Prisma -> PostgreSQL: 作業内容データ削除
-PostgreSQL -> Prisma: 削除結果返却
-Prisma -> Next.js: 削除結果返却
-Next.js -> ブラウザ: 削除完了
+alt 削除成功
+PostgreSQL -> Supabase: 削除成功
+  Supabase -> Next.js: 削除成功
+  Next.js -> ブラウザ: 削除完了メッセージ
 ブラウザ -> 作業内容一覧: リダイレクト
+else 削除失敗
+  PostgreSQL -> Supabase: 削除失敗
+  Supabase -> Next.js: 削除失敗
+  Next.js -> ブラウザ: エラーメッセージ
+end
 @enduml

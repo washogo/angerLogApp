@@ -12,8 +12,14 @@ participant 作業内容一覧
 ブラウザ -> Next.js: 編集内容送信
 Next.js -> Prisma: 作業内容更新リクエスト
 Prisma -> PostgreSQL: 作業内容データ更新
-PostgreSQL -> Prisma: 更新結果返却
-Prisma -> Next.js: 更新結果返却
-Next.js -> ブラウザ: 更新完了
+alt 更新成功
+PostgreSQL -> Supabase: 更新成功
+  Supabase -> Next.js: 更新成功
+  Next.js -> ブラウザ: 更新完了メッセージ
 ブラウザ -> 作業内容一覧: リダイレクト
+else 更新失敗
+  PostgreSQL -> Supabase: 更新失敗
+  Supabase -> Next.js: 更新失敗
+  Next.js -> ブラウザ: エラーメッセージ
+end
 @enduml

@@ -11,8 +11,14 @@ participant PostgreSQL
 ブラウザ -> Next.js: 作業内容登録画面表示要求
 Next.js -> Supabase: 作業内容取得クエリ実行
 Supabase -> PostgreSQL: 作業内容取得クエリ実行
-PostgreSQL -> Supabase: 取得結果返却
-Supabase -> Next.js: 取得結果返却
-Next.js -> ブラウザ: 作業内容登録画面表示
+alt 処理成功
+  PostgreSQL -> Supabase: 取得成功
+  Supabase -> Next.js: 取得成功
+  Next.js -> ブラウザ: 作業内容登録画面表示
+else 例外処理
+  PostgreSQL -> Supabase: 取得失敗
+  Supabase -> Next.js: 取得失敗
+  Next.js -> ブラウザ: エラーメッセージ
+end
 
 @enduml

@@ -1,0 +1,11 @@
+@startuml funcLogout
+title "ログアウト"
+participant ユーザー
+participant ブラウザ
+participant Next.js
+
+ユーザー -> ブラウザ: ログアウト
+ブラウザ -> Next.js: ログアウト処理
+Next.js -> ブラウザ: ログアウト完了メッセージ
+ブラウザ -> ログイン画面: リダイレクト
+@enduml

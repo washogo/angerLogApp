@@ -9,18 +9,20 @@ participant PostgreSQL
 
 ユーザー -> ブラウザ:対象のアンガーログ選択 
 ブラウザ -> Next.js: アンガーログ詳細画面表示要求
-Next.js -> Supabase: 作業種別取得クエリ実行
-Supabase -> PostgreSQL: 作業種別取得クエリ実行
-PostgreSQL -> Supabase: 取得結果返却
-Supabase -> Next.js: 取得結果返却
 Next.js -> Supabase: 作業内容取得クエリ実行
 Supabase -> PostgreSQL: 作業内容取得クエリ実行
 PostgreSQL -> Supabase: 取得結果返却
 Supabase -> Next.js: 取得結果返却
 Next.js -> Supabase: アンガーログ情報取得クエリ実行
 Supabase -> PostgreSQL: アンガーログ情報取得クエリ実行
-PostgreSQL -> Supabase: 取得結果返却
-Supabase -> Next.js: 取得結果返却
-Next.js -> ブラウザ: アンガーログ詳細画面表示
+alt 処理成功
+  PostgreSQL -> Supabase: 取得成功
+  Supabase -> Next.js: 取得成功
+  Next.js -> ブラウザ: アンガーログ詳細画面表示
+else 例外処理
+  PostgreSQL -> Supabase: 取得失敗
+  Supabase -> Next.js: 取得失敗
+  Next.js -> ブラウザ: エラーメッセージ
+end
 
 @enduml
