@@ -1,11 +1,24 @@
-import Signup from "@/components/pages/SignupPage";
+import SignupCard from "@/components/organisms/SignupCard";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 
-/**
- * サインアップページ
- * @returns
- */
-const SignUpPage = () => {
-  return <Signup />;
+const SignupPage = () => {
+  return (
+    <>
+      <Container maxWidth="sm">
+        <Box
+          sx={{
+            minHeight: "80vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <SignupCard />
+        </Box>
+      </Container>
+    </>
+  );
 };
 
-export default SignUpPage;
+export default SignupPage;
