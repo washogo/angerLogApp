@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+
 import {
   FormControl,
   FormLabel,
@@ -25,7 +25,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
 }) => (
   <FormControl fullWidth margin="normal">
     <FormLabel>{label}</FormLabel>
-    <Select value={value} onChange={onChange} name={name} label={label}>
+    <Select value={value} onChange={onChange} name={name} label="">
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}

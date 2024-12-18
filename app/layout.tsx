@@ -30,7 +30,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
     <html>
       <body>
         <div className="flex flex-col min-h-screen">
-          <main className="flex-1 container max-w-screen-xl mx-auto px-5 py-10">
+          <main className="flex-1 container max-w-screen-xl mx-auto">
             {children}
           </main>
 
