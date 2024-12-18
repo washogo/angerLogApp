@@ -1,7 +1,6 @@
 import ProfileForm from "../molecules/ProfileForm";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Header from "./Header";
 
 const ProfileCard: React.FC = () => (
   <Box

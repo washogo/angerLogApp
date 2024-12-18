@@ -59,7 +59,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode }) => {
         </Button>
       ) : (
         <>
-          <Button type="submit" color="primary" onClick={handleUpdate}>
+          <Button type="button" color="primary" onClick={handleUpdate}>
             更新
           </Button>
           <Button type="button" color="error" onClick={handleDelete}>

@@ -4,13 +4,17 @@ import LoginForm from "../molecules/LoginForm";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
+import { useRouter } from "next/navigation";
 
 /**
  * ログインカード
  */
 const LoginCard: React.FC = () => {
+  const router = useRouter();
   const handleLogin = (email: string, password: string) => {
     console.log("Logging in with", email, password);
+    router.push(`/dashboard`);
+    router.refresh();
   };
 
   return (
