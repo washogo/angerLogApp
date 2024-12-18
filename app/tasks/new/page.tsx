@@ -1,7 +1,7 @@
-import TaskNew from "@/components/pages/TaskNewPage";
+import TaskTempalte from "@/components/templates/TaskTemplate";
 
 const TaskNewPage = () => {
-  return <TaskNew />;
+  return <TaskTempalte mode="new" />;
 };
 
 export default TaskNewPage;

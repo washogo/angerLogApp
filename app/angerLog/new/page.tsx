@@ -1,7 +1,7 @@
-import AngerLogNew from "@/components/pages/AngerLogNew";
+import AngerLogMode from "@/components/templates/AngerLogTemplate";
 
 const AngerLogNewPage = () => {
-  return <AngerLogNew />;
+  return <AngerLogMode mode="new" />;
 };
 
 export default AngerLogNewPage;

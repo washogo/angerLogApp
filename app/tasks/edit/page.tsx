@@ -1,7 +1,7 @@
-import TaskEdit from "@/components/pages/TaskEditPage";
+import TaskTempalte from "@/components/templates/TaskTemplate";
 
 const TaskEditPage = () => {
-  return <TaskEdit />;
+  return <TaskTempalte mode="edit" />;
 };
 
 export default TaskEditPage;
