@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ユーザーテーブル
+model User {
+  id           String        @id @default(dbgenerated("uuid_generate_v4()"))
+  name         String
+  email        String        @unique
+  password     String
+  goal         String?
+  createdAt    DateTime      @default(now()) @db.Timestamptz()
+  angerRecords AngerRecord[]
+  workContents WorkContent[]
+
+  @@index([email])
+}
+
+// 怒り記録テーブル
+model AngerRecord {
+  id           Int         @id @default(autoincrement())
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  level        Int
+  situation    String?
+  feeling      String?
+  occurredDate DateTime    @db.Timestamptz()
+  workType     WorkContent @relation(fields: [workTypeId], references: [id])
+  workTypeId   Int
+
+  @@index([userId, occurredDate])
+}
+
+// 作業内容テーブル
+model WorkContent {
+  id           Int           @id @default(autoincrement())
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String
+  content      String
+  category     String
+  angerRecords AngerRecord[]
+
+  @@unique([userId, content, category]) // 複合ユニーク制約
+  @@index([userId])
+}
