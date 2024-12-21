@@ -17,25 +17,31 @@ const SignupCard: React.FC = () => {
     let errorFlg = false;
     try {
       await signup(formData);
-    } catch (error: any) {
-      msg = error.message;
+    } catch (error) {
+      if (error instanceof Error) {
+        msg = error.message;
+      } else {
+        msg = "予期しないエラーが発生しました。";
+      }
       errorFlg = true;
     }
-    errorFlg
-      ? toast.update(toastId, {
-          render: msg,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        })
-      : toast.update(toastId, {
-          render: msg,
-          type: "success",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
+    if (errorFlg) {
+      toast.update(toastId, {
+        render: msg,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+    } else {
+      toast.update(toastId, {
+        render: msg,
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+    }
     redirect("/dashboard");
   };
 

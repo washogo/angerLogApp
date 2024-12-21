@@ -3,7 +3,6 @@
 import Input from "../atoms/Input";
 import Button from "../atoms/Button";
 import Box from "@mui/material/Box";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type SignUpFormProps = {
