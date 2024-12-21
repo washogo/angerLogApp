@@ -1,4 +1,13 @@
-import { FormControl, FormLabel, TextField } from "@mui/material";
+import {
+  FormControl,
+  FormLabel,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 type InputProps = {
   name: string;
   type: string;
@@ -8,6 +17,10 @@ type InputProps = {
   rows?: number;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: boolean;
+  helperText?: string;
+  showPassword?: boolean;
+  onTogglePassword?: () => void;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -19,14 +32,16 @@ const Input: React.FC<InputProps> = ({
   rows,
   value,
   onChange,
+  error = false,
+  helperText = "",
+  showPassword = false,
+  onTogglePassword,
 }) => (
   <FormControl fullWidth margin="normal">
-    {/* 外部ラベル */}
     <FormLabel>{label}</FormLabel>
-    {/* 入力フィールド */}
     <TextField
       name={name}
-      type={type}
+      type={type === "password" && showPassword ? "text" : type}
       placeholder={placeholder}
       variant="outlined"
       value={value}
@@ -34,6 +49,18 @@ const Input: React.FC<InputProps> = ({
       fullWidth
       multiline={multiline}
       rows={rows}
+      error={error}
+      helperText={helperText}
+      InputProps={{
+        endAdornment:
+          type === "password" ? (
+            <InputAdornment position="end">
+              <IconButton onClick={onTogglePassword} edge="end">
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ) : null,
+      }}
     />
   </FormControl>
 );
