@@ -1,6 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
+
 type UserProfile = {
   name: string;
   email: string;
@@ -13,25 +16,25 @@ type SupabaseUserResponse = {
   error: any;
 };
 
-export async function getUser() {
-  const supabase = await createClient();
-
-  return await supabase.auth.getUser();
-}
-
-export async function selectUser(): Promise<SupabaseUserResponse> {
+export const checkAuth = async () => {
   const supabase = await createClient();
   const {
     data: { user },
-    error: authError,
-  } = await getUser();
+    error,
+  } = await supabase.auth.getUser();
 
-  if (authError || !user) {
-    return {
-      data: null,
-      error: authError || new Error("認証ユーザーが存在しません"),
-    };
+  if (!user || error) {
+    toast.error(error?.message || "認証ユーザーが存在しませんでした。");
+    redirect("/login");
   }
+
+  return user;
+};
+
+export async function selectUser(): Promise<SupabaseUserResponse> {
+  const supabase = await createClient();
+  const user = await checkAuth();
+
   return await supabase
     .from("User")
     .select("name, email, password, goal")
@@ -48,16 +51,6 @@ type updatesUserProps = {
 
 export async function updateUser(updates: updatesUserProps) {
   const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await getUser();
-
-  if (authError || !user) {
-    return {
-      data: null,
-      error: authError || new Error("認証ユーザーが存在しません"),
-    };
-  }
+  const user = await checkAuth();
   return await supabase.from("User").update(updates).eq("id", user.id);
 }
