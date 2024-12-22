@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { selectUser, updateUser } from "@/api/user";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type UserProfile = {
   name: string;
