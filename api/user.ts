@@ -24,7 +24,7 @@ export async function selectUser(): Promise<SupabaseUserResponse> {
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser();
+  } = await getUser();
 
   if (authError || !user) {
     return {
@@ -51,7 +51,7 @@ export async function updateUser(updates: updatesUserProps) {
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser();
+  } = await getUser();
 
   if (authError || !user) {
     return {
