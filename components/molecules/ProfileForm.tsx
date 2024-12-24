@@ -49,7 +49,7 @@ const ProfileForm: React.FC = () => {
           render: "プロフィール情報を取得しました。",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose: 1000,
           closeOnClick: true,
         });
       }
