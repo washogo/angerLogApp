@@ -1,33 +1,127 @@
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 import Input from "../atoms/Input";
 import SelectField from "../atoms/SelectField";
 import Button from "../atoms/Button";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
+import {
+  createTask,
+  updateTask,
+  deleteTask,
+  validateTaskCombination,
+} from "@/api/task";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type TaskFormProps = {
   mode: "new" | "edit";
+  taskId?: number;
+  initialCategories: string[];
+  initialData?: {
+    category: string;
+    content: string;
+  };
 };
 
-const TaskForm: React.FC<TaskFormProps> = ({ mode }) => {
+const TaskForm: React.FC<TaskFormProps> = ({
+  mode,
+  taskId,
+  initialCategories,
+  initialData,
+}) => {
   const isEdit = mode === "edit";
   const router = useRouter();
 
-  const handleSubmit = () => {
-    console.log("タスク登録成功");
-    router.push(`/tasks`);
-    router.refresh();
+  const [category, setCategory] = useState(initialData?.category || "");
+  const [content, setContent] = useState(initialData?.content || "");
+
+  const handleSubmit = async () => {
+    const toastId = toast.loading("処理中・・・・。");
+    try {
+      const exists = await validateTaskCombination(category, content);
+      if (exists) {
+        toast.update(toastId, {
+          render: "新規カテゴリが既存カテゴリと重複しています",
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          closeOnClick: true,
+        });
+        return;
+      }
+
+      await createTask({ category, content });
+      toast.update(toastId, {
+        render: "作業内容を登録しました",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+      router.push(`/tasks`);
+      router.refresh();
+    } catch (error) {
+      toast.update(toastId, {
+        render: "登録中にエラーが発生しました",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+      console.log(error);
+    }
   };
-  const handleUpdate = () => {
-    console.log("タスク更新成功");
-    router.push(`/tasks`);
-    router.refresh();
+
+  const handleUpdate = async () => {
+    const toastId = toast.loading("処理中・・・・。");
+    try {
+      await updateTask(taskId!, { category, content });
+      toast.update(toastId, {
+        render: "作業内容を更新しました",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+      router.push(`/tasks`);
+      router.refresh();
+    } catch (error) {
+      toast.update(toastId, {
+        render: "更新中にエラーが発生しました",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+      console.log(error);
+    }
   };
-  const handleDelete = () => {
-    console.log("タスク削除成功");
-    router.push(`/tasks`);
-    router.refresh();
+
+  const handleDelete = async () => {
+    const toastId = toast.loading("処理中・・・・。");
+    try {
+      await deleteTask(taskId!);
+      toast.update(toastId, {
+        render: "作業内容を削除しました",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+      router.push(`/tasks`);
+      router.refresh();
+    } catch (error) {
+      toast.update(toastId, {
+        render: "削除中にエラーが発生しました",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
+      console.log(error);
+    }
   };
 
   return (
@@ -35,24 +129,34 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode }) => {
       component="form"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
+      <ToastContainer position="top-center" />
       <Input
         type="text"
         label="新規カテゴリ"
         name="newCategory"
-        placeholder=""
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        placeholder="新規カテゴリを入力"
       />
       <SelectField
         label="既存カテゴリ"
         name="existingCategory"
-        value="仕事"
-        onChange={() => {}}
-        options={[
-          { value: "仕事", label: "仕事" },
-          { value: "趣味", label: "趣味" },
-        ]}
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        options={initialCategories.map((cat) => ({
+          value: cat,
+          label: cat,
+          key: cat,
+        }))}
       />
-      <Input type="text" label="作業内容" name="content" placeholder="接客" />
-
+      <Input
+        type="text"
+        label="作業内容"
+        name="content"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="作業内容を入力"
+      />
       {!isEdit ? (
         <Button type="button" color="success" onClick={handleSubmit}>
           登録
