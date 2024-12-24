@@ -33,6 +33,7 @@ const SignupCard: React.FC = () => {
         autoClose: 5000,
         closeOnClick: true,
       });
+      return;
     } else {
       toast.update(toastId, {
         render: msg,

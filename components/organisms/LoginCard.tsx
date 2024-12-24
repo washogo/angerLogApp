@@ -16,6 +16,7 @@ const LoginCard: React.FC = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     const toastId = toast.loading("処理中・・・・。");
     const formData = new FormData(e.currentTarget);
+    console.log("送信データ:", { formData });
     let msg = "ログインに成功しました。";
     let errorFlg = false;
     try {
@@ -36,6 +37,7 @@ const LoginCard: React.FC = () => {
         autoClose: 5000,
         closeOnClick: true,
       });
+      return;
     } else {
       toast.update(toastId, {
         render: msg,
