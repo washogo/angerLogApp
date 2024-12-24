@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
-import AngerLogForm from "@/components/molecules/AngerLogForm";
-import Header from "@/components/organisms/Header";
+import AngerLogForm from "../molecules/AngerLogForm";
+import Header from "../organisms/Header";
 
 const AngerLogTemplate: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => (
   <Container maxWidth="sm" sx={{ mt: 4 }}>

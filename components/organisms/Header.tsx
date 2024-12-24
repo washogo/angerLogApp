@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MenuList from "@/components/molecules/MenuList";
+import MenuList from "../molecules/MenuList";
 import Link from "next/link";
 
 const Header: React.FC<{ title: string }> = ({ title }) => {
