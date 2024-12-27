@@ -2,6 +2,8 @@ import { Container } from "@mui/material";
 import TaskForm from "../molecules/TaskForm";
 import Header from "../organisms/Header";
 import { selectUserTaskAll, selectTaskDetail } from "@/api/task";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type TaskTemplateProps = {
   mode: "new" | "edit";
@@ -15,18 +17,33 @@ type WorkContent = {
 };
 
 const TaskTemplate = async ({ mode, taskId }: TaskTemplateProps) => {
-  const { data: tasks } = await selectUserTaskAll();
-  const initialCategories = Array.from(
-    new Set(tasks?.map((task: WorkContent) => task.category) || [])
-  );
+  const toastId = toast.loading("処理中・・・・。");
+  let initialCategories: string[] = [];
   let initialData = undefined;
-  if (mode === "edit" && taskId) {
-    const { data: taskDetail } = await selectTaskDetail(taskId);
-    initialData = taskDetail ? taskDetail[0] : undefined;
+  try {
+    const tasks = await selectUserTaskAll();
+    initialCategories = Array.from(
+      new Set(tasks?.map((task: WorkContent) => task.category) || [])
+    );
+    if (mode === "edit" && taskId) {
+      const taskDetail = await selectTaskDetail(taskId);
+      initialData = taskDetail ? taskDetail[0] : undefined;
+    }
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "不明なエラーが発生しました。";
+    toast.update(toastId, {
+      render: errorMessage,
+      type: "error",
+      isLoading: false,
+      autoClose: 5000,
+      closeOnClick: true,
+    });
   }
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <ToastContainer position="top-center" />
       {mode === "new" ? (
         <Header title="作業内容登録" />
       ) : (

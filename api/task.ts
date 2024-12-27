@@ -10,30 +10,29 @@ type WorkContent = {
   category: string;
 };
 
-type SupabaseWorkContentResponse = {
-  data: WorkContent[] | null;
-  error: any;
-};
-
-export async function selectUserTaskAll(): Promise<SupabaseWorkContentResponse> {
+export async function selectUserTaskAll(): Promise<WorkContent[]> {
   const supabase = await createClient();
   const user = await checkAuth();
-  return await supabase
+  const { data, error } = await supabase
     .from("WorkContent")
     .select("id,userId,content ,category")
     .eq("userId", user.id);
+  if (error) throw error;
+  return data;
 }
 
 export async function selectTaskDetail(
   taskId: number
-): Promise<SupabaseWorkContentResponse> {
+): Promise<WorkContent[]> {
   const supabase = await createClient();
   const user = await checkAuth();
-  return await supabase
+  const { data, error } = await supabase
     .from("WorkContent")
     .select("id,userId,content ,category")
     .eq("userId", user.id)
     .eq("id", taskId);
+  if (error) throw error;
+  return data;
 }
 
 export const validateTaskCombination = async (

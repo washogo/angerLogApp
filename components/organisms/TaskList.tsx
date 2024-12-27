@@ -19,32 +19,36 @@ const TaskList: React.FC = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       const toastId = toast.loading("処理中・・・・。");
-      const { data, error } = await selectUserTaskAll();
-      if (error) {
+      try {
+        const data = await selectUserTaskAll();
+        setTasks(data || []);
+        if (data?.length === 0) {
+          toast.update(toastId, {
+            render: "作業内容が登録されていません。",
+            type: "info",
+            isLoading: false,
+            autoClose: 5000,
+            closeOnClick: true,
+          });
+        } else {
+          toast.update(toastId, {
+            render: "作業内容を取得しました。",
+            type: "success",
+            isLoading: false,
+            autoClose: 1000,
+            closeOnClick: true,
+          });
+        }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "不明なエラーが発生しました。";
         toast.update(toastId, {
-          render: error.message,
+          render: errorMessage,
           type: "error",
           isLoading: false,
           autoClose: 5000,
-          closeOnClick: true,
-        });
-        return;
-      }
-      setTasks(data || []);
-      if (data?.length === 0) {
-        toast.update(toastId, {
-          render: "作業内容が登録されていません。",
-          type: "info",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
-      } else {
-        toast.update(toastId, {
-          render: "作業内容を取得しました。",
-          type: "success",
-          isLoading: false,
-          autoClose: 1000,
           closeOnClick: true,
         });
       }

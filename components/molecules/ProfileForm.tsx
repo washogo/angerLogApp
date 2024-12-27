@@ -27,29 +27,34 @@ const ProfileForm: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const toastId = toast.loading("処理中・・・・。");
-      const { data, error } = await selectUser();
-      if (error) {
+      try {
+        const data = await selectUser();
+
+        if (data) {
+          setFormData({
+            name: data.name || "",
+            email: data.email || "",
+            password: "",
+            goal: data.goal || "",
+          });
+          toast.update(toastId, {
+            render: "プロフィール情報を取得しました。",
+            type: "success",
+            isLoading: false,
+            autoClose: 1000,
+            closeOnClick: true,
+          });
+        }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "不明なエラーが発生しました。";
         toast.update(toastId, {
-          render: error.message,
+          render: errorMessage,
           type: "error",
           isLoading: false,
           autoClose: 5000,
-          closeOnClick: true,
-        });
-        return;
-      }
-      if (data) {
-        setFormData({
-          name: data.name || "",
-          email: data.email || "",
-          password: "",
-          goal: data.goal || "",
-        });
-        toast.update(toastId, {
-          render: "プロフィール情報を取得しました。",
-          type: "success",
-          isLoading: false,
-          autoClose: 1000,
           closeOnClick: true,
         });
       }
@@ -73,18 +78,8 @@ const ProfileForm: React.FC = () => {
       goal: formData.goal,
       ...(formData.password && { password: formData.password }),
     };
-
-    const { error } = await updateUser(updates);
-
-    if (error) {
-      toast.update(toastId, {
-        render: error.message,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeOnClick: true,
-      });
-    } else {
+    try {
+      await updateUser(updates);
       toast.update(toastId, {
         render: "プロフィールを更新しました",
         type: "success",
@@ -94,6 +89,16 @@ const ProfileForm: React.FC = () => {
       });
       router.push(`/dashboard`);
       router.refresh();
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "不明なエラーが発生しました。";
+      toast.update(toastId, {
+        render: errorMessage,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+      });
     }
   };
 

@@ -11,11 +11,6 @@ type UserProfile = {
   goal: string;
 };
 
-type SupabaseUserResponse = {
-  data: UserProfile | null;
-  error: any;
-};
-
 export const checkAuth = async () => {
   const supabase = await createClient();
   const {
@@ -31,15 +26,17 @@ export const checkAuth = async () => {
   return user;
 };
 
-export async function selectUser(): Promise<SupabaseUserResponse> {
+export async function selectUser(): Promise<UserProfile> {
   const supabase = await createClient();
   const user = await checkAuth();
 
-  return await supabase
+  const { data, error } = await supabase
     .from("User")
     .select("name, email, password, goal")
     .eq("id", user.id)
     .single();
+  if (error) throw error;
+  return data;
 }
 
 type updatesUserProps = {
@@ -52,5 +49,8 @@ type updatesUserProps = {
 export async function updateUser(updates: updatesUserProps) {
   const supabase = await createClient();
   const user = await checkAuth();
-  return await supabase.from("User").update(updates).eq("id", user.id);
+  const { data, error } = await supabase
+    .from("User").update(updates).eq("id", user.id);
+  if (error) throw error;
+  return data;
 }
