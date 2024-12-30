@@ -45,13 +45,3 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
-
-export async function GET(request: Request) {
-  try {
-    const records = await prisma.angerRecord.findMany();
-    return NextResponse.json(records, { status: 200 });
-  } catch (error) {
-    console.error("Error during GET request:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}
