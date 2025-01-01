@@ -27,7 +27,12 @@ type WorkContent = {
   category: string;
 };
 
-const AngerLogForm: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => {
+type AngerLogFormProps = {
+  mode: "new" | "edit";
+  angerId?: number;
+};
+
+const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
   const isEdit = mode === "edit";
   const router = useRouter();
 
@@ -50,6 +55,7 @@ const AngerLogForm: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => {
 
   useEffect(() => {
     const fetchTasks = async () => {
+      const toastId = toast.loading("カテゴリとコンテンツの取得中・・・・。");
       try {
         const fetchedTasks = await selectUserTaskAll();
         setTasks(fetchedTasks);
@@ -68,14 +74,85 @@ const AngerLogForm: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => {
           .map((task) => ({ value: task.id.toString(), label: task.content }));
 
         setContents(initialContents);
+        toast.update(toastId, {
+          render: "カテゴリとコンテンツを取得しました",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+          closeOnClick: true,
+        });
       } catch (error) {
-        toast.error("カテゴリとコンテンツの取得に失敗しました");
-        console.error("カテゴリとコンテンツの取得に失敗しました:", error);
+        toast.update(toastId, {
+          render: "取得中にエラーが発生しました",
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          closeOnClick: true,
+        });
+        console.log(error);
       }
     };
 
     fetchTasks();
   }, []);
+
+  useEffect(() => {
+    const fetchAngerLog = async () => {
+      if (mode === "edit" && angerId && tasks.length > 0) {
+        const toastId = toast.loading("アンガーログ取得中・・・・。");
+        try {
+          const response = await fetch(`/api/angerlog/${angerId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            console.log(response);
+            throw new Error("データ取得に失敗しました");
+          }
+          const data = await response.json();
+          const occurredDate = new Date(data.occurredDate);
+          const date = occurredDate.toISOString().split("T")[0];
+          const time = occurredDate.toISOString().split("T")[1].slice(0, 5);
+
+          setFormData({
+            level: data.level,
+            workTypeId: data.workTypeId,
+            date: date,
+            time: time,
+            situation: data.situation || "",
+            feeling: data.feeling || "",
+          });
+          const task = tasks.find((task) => task.id === data.workTypeId);
+          if (task) {
+            setSelectedCategory(task.category);
+            handleCategoryChange(task.category);
+          }
+          if (data) {
+            toast.update(toastId, {
+              render: "アンガーログを取得しました",
+              type: "success",
+              isLoading: false,
+              autoClose: 1000,
+              closeOnClick: true,
+            });
+          }
+        } catch (error) {
+          toast.update(toastId, {
+            render: "取得中にエラーが発生しました",
+            type: "error",
+            isLoading: false,
+            autoClose: 5000,
+            closeOnClick: true,
+          });
+          console.log(error);
+        }
+      }
+    };
+
+    fetchAngerLog();
+  }, [mode, angerId, tasks.length]);
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
@@ -103,7 +180,7 @@ const AngerLogForm: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => {
     return null;
   };
 
-  const handleSubmit = async () => {
+  const handleInsert = async () => {
     const error = validateForm();
     if (error) {
       toast.error(error);
@@ -153,6 +230,14 @@ const AngerLogForm: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => {
     }
   };
 
+  const handleSubmit = async () => {
+    if (mode === "edit" && angerId) {
+      handleUpdate();
+    } else {
+      handleInsert();
+    }
+  };
+
   const handleUpdate = async () => {
     const error = validateForm();
     if (error) {
@@ -162,14 +247,14 @@ const AngerLogForm: React.FC<{ mode: "new" | "edit" }> = ({ mode }) => {
     const toastId = toast.loading("処理中・・・・。");
 
     try {
-      if (!formData.id) throw new Error("IDが存在しません。");
+      if (!angerId) throw new Error("IDが存在しません。");
       const response = await fetch(`/api/angerlog`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: formData.id,
+          id: angerId,
           level: formData.level,
           workTypeId: formData.workTypeId,
           occurredDate: `${formData.date}T${formData.time}`,
