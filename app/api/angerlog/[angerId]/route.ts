@@ -18,8 +18,10 @@ export async function GET(request: Request, { params }: PageProps) {
     const record = await prisma.angerRecord.findUnique({
       where: { id: angerId },
     });
+    console.error("record:", record);
 
     if (!record) {
+      console.error("angerId:", angerId);
       return new Response("Not Found", { status: 404 });
     }
 
