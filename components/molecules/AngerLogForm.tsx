@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { checkAuth } from "@/api/user";
 import { DateTime } from "luxon";
+import getApiBase from "@/utils/apibase";
 
 export type AngerLog = {
   id?: number;
@@ -99,10 +100,12 @@ const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
 
   useEffect(() => {
     const fetchAngerLog = async () => {
+      const apiBase = await getApiBase();
       if (mode === "edit" && angerId && tasks.length > 0) {
         const toastId = toast.loading("アンガーログ取得中・・・・。");
         try {
-          const response = await fetch(`/api/angerlog/${angerId}`, {
+          console.log(getApiBase());
+          const response = await fetch(`${apiBase}/api/angerlog/${angerId}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
