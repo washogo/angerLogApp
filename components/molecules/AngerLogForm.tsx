@@ -103,12 +103,15 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
       if (mode === "edit" && angerId && tasks.length > 0) {
         const toastId = toast.loading("アンガーログ取得中・・・・。");
         try {
-          const response = await fetch(`${baseUrl}/api/angerlog/${angerId}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const response = await fetch(
+            `${baseUrl}/api/angerlog/detail?angerId=${angerId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
           if (!response.ok) {
             console.log(response);
             throw new Error("データ取得に失敗しました");
