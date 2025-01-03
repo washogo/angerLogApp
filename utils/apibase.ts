@@ -1,11 +1,17 @@
+import { headers } from "next/headers";
+
+/**
+ * 絶対パス取得
+ * @returns ホストとプロトコル取得し絶対パス用のURL文字列を返却
+ */
 const getApiBase = async () => {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  if (typeof window !== "undefined") {
-    return window.location.origin;
-  }
-  return "http://localhost:3000";
+  // ホストとプロトコル取得
+  const headersData = headers();
+  const protocol = (await headersData).get("x-forwarded-proto") || "http";
+  const host = (await headersData).get("host");
+  // 絶対パス
+  const apiBase = `${protocol}://${host}`;
+  return apiBase;
 };
 
 export default getApiBase;

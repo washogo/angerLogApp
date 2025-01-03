@@ -5,9 +5,14 @@ import Header from "../organisms/Header";
 type AngerLogTemplateProps = {
   mode: "new" | "edit";
   angerId?: number;
+  baseUrl?: string;
 };
 
-const AngerLogTemplate = ({ mode, angerId }: AngerLogTemplateProps) => {
+const AngerLogTemplate = ({
+  mode,
+  angerId,
+  baseUrl,
+}: AngerLogTemplateProps) => {
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       {mode === "new" ? (
@@ -15,7 +20,7 @@ const AngerLogTemplate = ({ mode, angerId }: AngerLogTemplateProps) => {
       ) : (
         <Header title="アンガーログ編集" />
       )}
-      <AngerLogForm mode={mode} angerId={angerId} />
+      <AngerLogForm mode={mode} angerId={angerId} baseUrl={baseUrl} />
     </Container>
   );
 };

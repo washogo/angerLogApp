@@ -32,9 +32,10 @@ type WorkContent = {
 type AngerLogFormProps = {
   mode: "new" | "edit";
   angerId?: number;
+  baseUrl?: string;
 };
 
-const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
+const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
   const isEdit = mode === "edit";
   const router = useRouter();
 
@@ -100,11 +101,10 @@ const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
 
   useEffect(() => {
     const fetchAngerLog = async () => {
-      const apiBase = await getApiBase();
       if (mode === "edit" && angerId && tasks.length > 0) {
         const toastId = toast.loading("アンガーログ取得中・・・・。");
         try {
-          const response = await fetch(`${apiBase}/api/angerlog/${angerId}`, {
+          const response = await fetch(`${baseUrl}/api/angerlog/${angerId}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
