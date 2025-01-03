@@ -9,6 +9,7 @@ import { selectUserTaskAll } from "../../api/task";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { checkAuth } from "@/api/user";
+import { DateTime } from "luxon";
 
 export type AngerLog = {
   id?: number;
@@ -112,15 +113,21 @@ const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
             throw new Error("データ取得に失敗しました");
           }
           const data = await response.json();
-          const occurredDate = new Date(data.occurredDate);
-          const date = occurredDate.toISOString().split("T")[0];
-          const time = occurredDate.toISOString().split("T")[1].slice(0, 5);
+
+          const localDate = new Date(data.occurredDate);
+          const date = localDate.toISOString().split("T")[0];
+          const time = localDate.toTimeString().slice(0, 5);
+          console.log(date);
+          console.log(time);
+          const occurredDate = DateTime.fromISO(data.occurredDate, {
+            zone: "Asia/Tokyo",
+          });
 
           setFormData({
             level: data.level,
             workTypeId: data.workTypeId,
-            date: date,
-            time: time,
+            date: occurredDate.toFormat("yyyy-MM-dd"),
+            time: occurredDate.toFormat("HH:mm"),
             situation: data.situation || "",
             feeling: data.feeling || "",
           });
