@@ -115,10 +115,6 @@ const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
             throw new Error("データ取得に失敗しました");
           }
           const data = await response.json();
-
-          const localDate = new Date(data.occurredDate);
-          const date = localDate.toISOString().split("T")[0];
-          const time = localDate.toTimeString().slice(0, 5);
           const occurredDate = DateTime.fromISO(data.occurredDate, {
             zone: "Asia/Tokyo",
           });
