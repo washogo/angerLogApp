@@ -55,27 +55,24 @@ export async function GET(request: Request) {
   const day = searchParams.get("day");
   const type = searchParams.get("type");
 
-  let startDate: Date;
-  let endDate: Date;
-
-  if (type === "daily") {
-    startDate = new Date(`${year}-${month}-${day}T00:00:00`);
-    endDate = new Date(`${year}-${month}-${day}T23:59:59`);
+  let startDate, endDate;
+  if (type === "daily" && day) {
+    startDate = `${year}-${month}-${day} 00:00:00`;
+    endDate = `${year}-${month}-${day} 23:59:59`;
   } else if (type === "monthly") {
-    startDate = new Date(`${year}-${month}-01T00:00:00`);
-    endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1));
+    startDate = `${year}-${month}-01 00:00:00`;
+    const lastDay = new Date(Number(year), Number(month), 0).getDate();
+    endDate = `${year}-${month}-${lastDay} 23:59:59`;
   } else {
     return NextResponse.json({ error: "無効な検索条件です" }, { status: 400 });
   }
   try {
-    console.log(startDate)
-    console.log(endDate)
     const angerLogs = await prisma.angerRecord.findMany({
       where: {
         userId,
         occurredDate: {
-          gte: startDate,
-          lt: endDate,
+          gte: new Date(startDate),
+          lte: new Date(endDate),
         },
       },
       orderBy: {
