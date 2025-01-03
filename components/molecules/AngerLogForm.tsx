@@ -104,7 +104,6 @@ const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
       if (mode === "edit" && angerId && tasks.length > 0) {
         const toastId = toast.loading("アンガーログ取得中・・・・。");
         try {
-          console.log(getApiBase());
           const response = await fetch(`${apiBase}/api/angerlog/${angerId}`, {
             method: "GET",
             headers: {
@@ -120,8 +119,6 @@ const AngerLogForm = ({ mode, angerId }: AngerLogFormProps) => {
           const localDate = new Date(data.occurredDate);
           const date = localDate.toISOString().split("T")[0];
           const time = localDate.toTimeString().slice(0, 5);
-          console.log(date);
-          console.log(time);
           const occurredDate = DateTime.fromISO(data.occurredDate, {
             zone: "Asia/Tokyo",
           });

@@ -10,7 +10,6 @@ type PageProps = {
 export async function GET(request: Request, { params }: PageProps) {
   try {
     const angerId = parseInt((await params).angerId);
-    console.log("angerId:", angerId);
 
     if (isNaN(angerId)) {
       return new Response("Invalid ID", { status: 400 });
@@ -19,7 +18,6 @@ export async function GET(request: Request, { params }: PageProps) {
     const record = await prisma.angerRecord.findUnique({
       where: { id: angerId },
     });
-    console.log("record:", record);
 
     if (!record) {
       console.log("angerId:", angerId);
