@@ -93,14 +93,7 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
         });
         console.log(error);
       }
-    };
-
-    fetchTasks();
-  }, []);
-
-  useEffect(() => {
-    const fetchAngerLog = async () => {
-      if (mode === "edit" && angerId && tasks.length > 0) {
+      if (mode === "edit" && angerId) {
         const toastId = toast.loading("アンガーログ取得中・・・・。");
         try {
           const response = await fetch(
@@ -156,8 +149,8 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
       }
     };
 
-    fetchAngerLog();
-  }, [mode, angerId, tasks.length]);
+    fetchTasks();
+  }, []);
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
