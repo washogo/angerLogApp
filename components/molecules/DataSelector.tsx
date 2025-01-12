@@ -18,17 +18,15 @@ type Filter = {
 };
 
 type DataSelectorProps = {
+  filter: Filter;
   onFilter: (filter: Filter) => void;
 };
 
-const DataSelector: React.FC<DataSelectorProps> = ({ onFilter }) => {
-  const today = new Date();
-  const [viewType, setViewType] = useState<"daily" | "monthly">("daily");
-  const [year, setYear] = useState(today.getFullYear().toString());
-  const [month, setMonth] = useState(
-    (today.getMonth() + 1).toString().padStart(2, "0")
-  );
-  const [day, setDay] = useState(today.getDate().toString().padStart(2, "0"));
+const DataSelector: React.FC<DataSelectorProps> = ({ filter, onFilter }) => {
+  const [viewType, setViewType] = useState<"daily" | "monthly">(filter.type);
+  const [year, setYear] = useState(filter.year);
+  const [month, setMonth] = useState(filter.month);
+  const [day, setDay] = useState(filter.day);
   const [error, setError] = useState<string | null>(null);
 
   const isValidDate = (y: string, m: string, d?: string) => {

@@ -30,8 +30,10 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter }) => {
   const [logs, setLogs] = useState<AngerLog[]>([]);
 
   useEffect(() => {
-    const toastId = toast.loading("処理中・・・・。");
+    let toastId: string | number | undefined;
+
     const fetchFilteredLogs = async () => {
+      toastId = toast.loading("リスト情報取得中・・・・。");
       try {
         const params = new URLSearchParams(filter).toString();
         const response = await fetch(`/api/angerlog?${params}`);
@@ -69,6 +71,10 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter }) => {
           autoClose: 5000,
           closeOnClick: true,
         });
+      } finally {
+        if (toastId && toast.isActive(toastId)) {
+          toast.dismiss(toastId);
+        }
       }
     };
 
@@ -83,6 +89,7 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter }) => {
         <Link key={log.id} href={`/angerLog/edit/${log.id}`}>
           <Card sx={{ mb: 2 }}>
             <CardContent>
+              怒りレベル:{log.level}
               <AngerLogIcon level={log.level} />
               <Typography variant="body1">
                 {log.workType.category} {log.workType.content}

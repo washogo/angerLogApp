@@ -18,7 +18,7 @@ const today = new Date();
 
 const DashboardPage = () => {
   const [filter, setFilter] = useState<Filter>({
-    type: "daily",
+    type: "monthly",
     year: today.getFullYear().toString(),
     month: (today.getMonth() + 1).toString().padStart(2, "0"),
     day: today.getDate().toString().padStart(2, "0"),
@@ -30,9 +30,9 @@ const DashboardPage = () => {
         <Header title="アンガーログアプリ" />
         <Container>
           <Box sx={{ my: 2 }}>
-            <DataSelector onFilter={setFilter} />
+            <DataSelector filter={filter} onFilter={setFilter} />
           </Box>
-          <AngerChart />
+          <AngerChart filter={filter} />
           <Box sx={{ mt: 4 }}>
             <AngerLogList filter={filter} />
           </Box>

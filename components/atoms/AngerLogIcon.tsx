@@ -1,5 +1,3 @@
-import { Typography } from "@mui/material";
-
 const levelIcons = [
   { value: 1, label: "😞" },
   { value: 2, label: "😖" },
@@ -20,11 +18,7 @@ const AngerLogIcon = ({ level }: AngerLogIconProp) => {
   const levelInfo = levelIcons.find((icon) => icon.value === level);
   const label = levelInfo ? levelInfo.label : ``;
 
-  return (
-    <Typography variant="subtitle1">
-      怒りレベル: {level} {label}
-    </Typography>
-  );
+  return <>{label}</>;
 };
 
 export default AngerLogIcon;
