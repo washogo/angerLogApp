@@ -4,7 +4,7 @@ import Button from "../atoms/Button";
 import Box from "@mui/material/Box";
 import { useState, useEffect } from "react";
 import { selectUser, updateUser } from "@/api/user";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
@@ -104,7 +104,6 @@ const ProfileForm: React.FC = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       <Box
         component="form"
         onSubmit={handleSubmit}

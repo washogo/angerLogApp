@@ -4,7 +4,7 @@ import SignupForm from "../molecules/SignupForm";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signup } from "@/api/auth";
 import { redirect } from "next/navigation";
@@ -48,7 +48,6 @@ const SignupCard: React.FC = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       <Box
         sx={{
           p: 4,

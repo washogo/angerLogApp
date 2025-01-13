@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import Link from "next/link";
 import AngerLogIcon from "../atoms/AngerLogIcon";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type AngerLog = {
@@ -83,7 +83,6 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter }) => {
 
   return (
     <Box>
-      <ToastContainer position="top-center" />
       <Typography variant="h6">アンガーログ一覧</Typography>
       {logs.map((log) => (
         <Link key={log.id} href={`/angerLog/edit/${log.id}`}>

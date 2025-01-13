@@ -4,7 +4,7 @@ import { Container } from "@mui/material";
 import TaskForm from "../molecules/TaskForm";
 import Header from "../organisms/Header";
 import { selectUserTaskAll, selectTaskDetail } from "@/api/task";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
@@ -61,7 +61,6 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <ToastContainer position="top-center" />
       {mode === "new" ? (
         <Header title="作業内容登録" />
       ) : (

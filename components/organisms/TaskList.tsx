@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import TaskListItem from "./TaskListItem";
 import { Box, Button } from "@mui/material";
 import { selectUserTaskAll } from "@/api/task";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type Task = {
@@ -58,7 +58,6 @@ const TaskList: React.FC = () => {
 
   return (
     <Box>
-      <ToastContainer position="top-center" />
       <Box sx={{ display: "flex", justifyContent: "flex-end", m: 2 }}>
         <Button variant="contained" color="success" href="/tasks/new">
           新規登録

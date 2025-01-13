@@ -6,7 +6,7 @@ import SelectField from "../atoms/SelectField";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { selectUserTaskAll } from "../../api/task";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { checkAuth } from "@/api/user";
 import { DateTime } from "luxon";
@@ -291,7 +291,6 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
       component="form"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-      <ToastContainer position="top-center" />
       <SelectField
         label="怒りレベル（レベル10人生最大）"
         name="angerLevel"

@@ -12,7 +12,7 @@ import {
   deleteTask,
   validateTaskCombination,
 } from "@/api/task";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type TaskFormProps = {
@@ -129,7 +129,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
       component="form"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-      <ToastContainer position="top-center" />
       <Input
         type="text"
         label="新規カテゴリ"

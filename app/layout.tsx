@@ -1,6 +1,7 @@
 import "server-only";
 
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "アンガーログアプリ",
@@ -31,6 +32,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       <body>
         <div className="flex flex-col min-h-screen">
           <main className="flex-1 container max-w-screen-xl mx-auto">
+            <ToastContainer position="top-center" />
             {children}
           </main>
 

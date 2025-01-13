@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import { login } from "@/api/auth";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { redirect } from "next/navigation";
 
@@ -52,7 +52,6 @@ const LoginCard: React.FC = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       <Box
         sx={{
           p: 4,
