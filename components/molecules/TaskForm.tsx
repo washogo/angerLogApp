@@ -6,12 +6,6 @@ import SelectField from "../atoms/SelectField";
 import Button from "../atoms/Button";
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {
-  createTask,
-  updateTask,
-  deleteTask,
-  validateTaskCombination,
-} from "@/api/task";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,8 +34,14 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleSubmit = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
-      const exists = await validateTaskCombination(category, content);
-      if (exists) {
+      const response = await fetch(`/api/task/detail`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch task");
+      }
+      const exists = await response.json();
+
+      // const exists = await validateTaskCombination(category, content);
+      if (exists && exists.length > 0) {
         toast.update(toastId, {
           render: "新規カテゴリが既存カテゴリと重複しています",
           type: "error",
@@ -52,7 +52,22 @@ const TaskForm: React.FC<TaskFormProps> = ({
         return;
       }
 
-      await createTask({ category, content });
+      const createRes = await fetch(`/api/task`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          category,
+          content,
+        }),
+      });
+
+      if (!createRes.ok) {
+        console.log(createRes);
+        throw new Error("Failed to fetch task");
+      }
+      // await createTask({ category, content });
       toast.update(toastId, {
         render: "作業内容を登録しました",
         type: "success",
@@ -77,7 +92,23 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleUpdate = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
-      await updateTask(taskId!, { category, content });
+      const response = await fetch(`/api/task`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: taskId,
+          category,
+          content,
+        }),
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error("Failed to fetch task");
+      }
+      // await updateTask(taskId!, { category, content });
       toast.update(toastId, {
         render: "作業内容を更新しました",
         type: "success",
@@ -102,7 +133,21 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleDelete = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
-      await deleteTask(taskId!);
+      const response = await fetch(`/api/task`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: taskId,
+        }),
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error("Failed to fetch task");
+      }
+      // await deleteTask(taskId!);
       toast.update(toastId, {
         render: "作業内容を削除しました",
         type: "success",

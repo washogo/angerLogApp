@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import TaskListItem from "./TaskListItem";
 import { Box, Button } from "@mui/material";
-import { selectUserTaskAll } from "@/api/task";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,7 +19,11 @@ const TaskList: React.FC = () => {
     const fetchTasks = async () => {
       const toastId = toast.loading("処理中・・・・。");
       try {
-        const data = await selectUserTaskAll();
+        const response = await fetch(`/api/task`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch task");
+        }
+        const data = await response.json();
         setTasks(data || []);
         if (data?.length === 0) {
           toast.update(toastId, {

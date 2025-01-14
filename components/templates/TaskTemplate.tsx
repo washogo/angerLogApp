@@ -3,7 +3,6 @@
 import { Container } from "@mui/material";
 import TaskForm from "../molecules/TaskForm";
 import Header from "../organisms/Header";
-import { selectUserTaskAll, selectTaskDetail } from "@/api/task";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
@@ -29,7 +28,12 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
     const fetchInitialData = async () => {
       const toastId = toast.loading("処理中・・・・。");
       try {
-        const tasks = await selectUserTaskAll();
+        const response = await fetch(`/api/task`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch task");
+        }
+        const tasks = await response.json();
+        // const tasks = await selectUserTaskAll();
         setInitialCategories(
           Array.from(
             new Set(tasks?.map((task: WorkContent) => task.category) || [])
@@ -37,7 +41,12 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
         );
 
         if (mode === "edit" && taskId) {
-          const taskDetail = await selectTaskDetail(taskId);
+          const response = await fetch(`/api/task/detail?${taskId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch task");
+          }
+          const taskDetail = await response.json();
+          // const taskDetail = await selectTaskDetail(taskId);
           setInitialData(taskDetail ? taskDetail[0] : undefined);
         }
       } catch (error) {

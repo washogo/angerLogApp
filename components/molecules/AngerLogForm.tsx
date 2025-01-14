@@ -5,7 +5,6 @@ import InputField from "../atoms/Input";
 import SelectField from "../atoms/SelectField";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { selectUserTaskAll } from "../../api/task";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { checkAuth } from "@/api/user";
@@ -59,12 +58,18 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
     const fetchTasks = async () => {
       const toastId = toast.loading("カテゴリとコンテンツの取得中・・・・。");
       try {
-        const fetchedTasks = await selectUserTaskAll();
+        const response = await fetch(`/api/task`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch task");
+        }
+        const fetchedTasks: WorkContent[] = await response.json();
+
+        // const fetchedTasks = await selectUserTaskAll();
         setTasks(fetchedTasks);
 
         const uniqueCategories = Array.from(
-          new Set(fetchedTasks.map((task) => task.category))
-        ).map((category) => ({ value: category, label: category }));
+          new Set(fetchedTasks.map((task: WorkContent) => task.category))
+        ).map((category: string) => ({ value: category, label: category }));
 
         setCategories(uniqueCategories);
 
@@ -72,8 +77,11 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
         setSelectedCategory(initialCategory);
 
         const initialContents = fetchedTasks
-          .filter((task) => task.category === initialCategory)
-          .map((task) => ({ value: task.id.toString(), label: task.content }));
+          .filter((task: WorkContent) => task.category === initialCategory)
+          .map((task: WorkContent) => ({
+            value: task.id.toString(),
+            label: task.content,
+          }));
 
         setContents(initialContents);
         toast.update(toastId, {
