@@ -40,7 +40,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
       }
       const exists = await response.json();
 
-      // const exists = await validateTaskCombination(category, content);
       if (exists && exists.length > 0) {
         toast.update(toastId, {
           render: "新規カテゴリが既存カテゴリと重複しています",

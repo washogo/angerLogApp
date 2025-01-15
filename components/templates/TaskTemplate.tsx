@@ -28,12 +28,16 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
     const fetchInitialData = async () => {
       const toastId = toast.loading("処理中・・・・。");
       try {
-        const response = await fetch(`/api/task`);
+        const response = await fetch(`/api/task`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch task");
         }
         const tasks = await response.json();
-        // const tasks = await selectUserTaskAll();
         setInitialCategories(
           Array.from(
             new Set(tasks?.map((task: WorkContent) => task.category) || [])
@@ -46,7 +50,6 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
             throw new Error("Failed to fetch task");
           }
           const taskDetail = await response.json();
-          // const taskDetail = await selectTaskDetail(taskId);
           setInitialData(taskDetail ? taskDetail[0] : undefined);
         }
       } catch (error) {

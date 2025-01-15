@@ -69,7 +69,6 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
         }
         const fetchedTasks: WorkContent[] = await response.json();
 
-        // const fetchedTasks = await selectUserTaskAll();
         setTasks(fetchedTasks);
 
         const uniqueCategories = Array.from(
