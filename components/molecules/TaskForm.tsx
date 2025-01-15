@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../atoms/Input";
 import SelectField from "../atoms/SelectField";
 import Button from "../atoms/Button";
@@ -27,14 +27,27 @@ const TaskForm: React.FC<TaskFormProps> = ({
 }) => {
   const isEdit = mode === "edit";
   const router = useRouter();
-
   const [category, setCategory] = useState(initialData?.category || "");
   const [content, setContent] = useState(initialData?.content || "");
+
+  useEffect(() => {
+    setCategory(initialData?.category || "");
+    setContent(initialData?.content || "");
+  }, [initialData]);
 
   const handleSubmit = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
-      const response = await fetch(`/api/task/detail`);
+      const response = await fetch(`/api/task/detail`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          category,
+          content,
+        }),
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch task");
       }

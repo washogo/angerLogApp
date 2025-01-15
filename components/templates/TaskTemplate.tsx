@@ -45,12 +45,12 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
         );
 
         if (mode === "edit" && taskId) {
-          const response = await fetch(`/api/task/detail?${taskId}`);
+          const response = await fetch(`/api/task/detail?taskId=${taskId}`);
           if (!response.ok) {
             throw new Error("Failed to fetch task");
           }
           const taskDetail = await response.json();
-          setInitialData(taskDetail ? taskDetail[0] : undefined);
+          setInitialData(taskDetail ? taskDetail : undefined);
         }
       } catch (error) {
         const errorMessage =
