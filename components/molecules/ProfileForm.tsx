@@ -3,7 +3,6 @@ import Input from "../atoms/Input";
 import Button from "../atoms/Button";
 import Box from "@mui/material/Box";
 import { useState, useEffect } from "react";
-import { selectUser, updateUser } from "@/api/user";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
@@ -11,7 +10,6 @@ import { useRouter } from "next/navigation";
 type UserProfile = {
   name: string;
   email: string;
-  password: string;
   goal: string;
 };
 
@@ -20,7 +18,6 @@ const ProfileForm: React.FC = () => {
   const [formData, setFormData] = useState<UserProfile>({
     name: "",
     email: "",
-    password: "",
     goal: "",
   });
 
@@ -28,13 +25,20 @@ const ProfileForm: React.FC = () => {
     const fetchUserData = async () => {
       const toastId = toast.loading("処理中・・・・。");
       try {
-        const data = await selectUser();
-
+        const response = await fetch(`/api/user`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch user");
+        }
+        const data = await response.json();
         if (data) {
           setFormData({
             name: data.name || "",
             email: data.email || "",
-            password: "",
             goal: data.goal || "",
           });
           toast.update(toastId, {
@@ -71,15 +75,23 @@ const ProfileForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const toastId = toast.loading("処理中・・・・。");
-
-    const updates = {
-      name: formData.name,
-      email: formData.email,
-      goal: formData.goal,
-      ...(formData.password && { password: formData.password }),
-    };
     try {
-      await updateUser(updates);
+      const response = await fetch(`/api/user`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          goal: formData.goal,
+        }),
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error("Failed to fetch user");
+      }
       toast.update(toastId, {
         render: "プロフィールを更新しました",
         type: "success",
@@ -123,14 +135,6 @@ const ProfileForm: React.FC = () => {
           label="メールアドレス"
           placeholder="sample@gmail.com"
           value={formData.email}
-          onChange={handleChange}
-        />
-        <Input
-          name="password"
-          type="password"
-          label="パスワード"
-          placeholder="新しいパスワードを入力"
-          value={formData.password}
           onChange={handleChange}
         />
         <Input

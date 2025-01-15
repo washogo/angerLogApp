@@ -66,7 +66,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
         console.log(createRes);
         throw new Error("Failed to fetch task");
       }
-      // await createTask({ category, content });
       toast.update(toastId, {
         render: "作業内容を登録しました",
         type: "success",
@@ -107,7 +106,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
         console.log(response);
         throw new Error("Failed to fetch task");
       }
-      // await updateTask(taskId!, { category, content });
       toast.update(toastId, {
         render: "作業内容を更新しました",
         type: "success",
@@ -146,7 +144,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
         console.log(response);
         throw new Error("Failed to fetch task");
       }
-      // await deleteTask(taskId!);
+
       toast.update(toastId, {
         render: "作業内容を削除しました",
         type: "success",
