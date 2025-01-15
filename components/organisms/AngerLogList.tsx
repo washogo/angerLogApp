@@ -25,8 +25,9 @@ type AngerLogListProps = {
     month: string;
     day?: string;
   };
+  apiBase: string;
 };
-const AngerLogList: React.FC<AngerLogListProps> = ({ filter }) => {
+const AngerLogList: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   const [logs, setLogs] = useState<AngerLog[]>([]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter }) => {
       toastId = toast.loading("リスト情報取得中・・・・。");
       try {
         const params = new URLSearchParams(filter).toString();
-        const response = await fetch(`/api/angerlog?${params}`);
+        const response = await fetch(`${apiBase}/api/angerlog?${params}`);
         if (!response.ok) {
           throw new Error("Failed to fetch anger logs");
         }

@@ -37,6 +37,7 @@ type AngerLogListProps = {
     month: string;
     day?: string;
   };
+  apiBase: string;
 };
 type AngerRecord = {
   occurredDate: string;
@@ -46,7 +47,7 @@ type CategoryData = {
   content: string;
   level: number;
 };
-const AngerChart: React.FC<AngerLogListProps> = ({ filter }) => {
+const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   const [averageLevel, setAverageLevel] = useState(0);
   const [topCategories, setTopCategories] = useState<CategoryData[]>([]);
   const [lineChartData, setLineChartData] = useState({
@@ -76,7 +77,7 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter }) => {
       toastId = toast.loading("チャート情報取得中・・・・。");
       try {
         const params = new URLSearchParams(filter).toString();
-        const response = await fetch(`/api/angerlog/chart?${params}`);
+        const response = await fetch(`${apiBase}/api/angerlog/chart?${params}`);
         if (!response.ok) {
           throw new Error("Failed to fetch anger logs");
         }
