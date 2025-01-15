@@ -7,7 +7,7 @@ import { Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { checkAuth } from "@/api/user";
+import { checkAuth } from "@/api/auth";
 import { DateTime } from "luxon";
 
 export type AngerLog = {
@@ -58,7 +58,12 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
     const fetchTasks = async () => {
       const toastId = toast.loading("カテゴリとコンテンツの取得中・・・・。");
       try {
-        const response = await fetch(`/api/task`);
+        const response = await fetch(`/api/task`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch task");
         }

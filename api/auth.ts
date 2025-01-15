@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -49,7 +51,20 @@ export async function signup(formData: FormData) {
     }
   }
 }
+export const checkAuth = async () => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
+  if (!user || error) {
+    toast.error(error?.message || "認証ユーザーが存在しませんでした。");
+    redirect("/login");
+  }
+
+  return user;
+};
 const translateError = (errorMessage: string) => {
   const errorTranslations: { [index: string]: string } = {
     "email rate limit exceeded":

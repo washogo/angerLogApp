@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { checkAuth } from "./user";
+import { checkAuth } from "./auth";
 
 type WorkContent = {
   id: number;

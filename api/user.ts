@@ -1,8 +1,8 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { toast } from "react-toastify";
+import { checkAuth } from "./auth";
+
 
 type UserProfile = {
   name: string;
@@ -11,20 +11,7 @@ type UserProfile = {
   goal: string;
 };
 
-export const checkAuth = async () => {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
 
-  if (!user || error) {
-    toast.error(error?.message || "認証ユーザーが存在しませんでした。");
-    redirect("/login");
-  }
-
-  return user;
-};
 
 export async function selectUser(): Promise<UserProfile> {
   const supabase = await createClient();

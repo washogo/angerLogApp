@@ -19,7 +19,12 @@ const TaskList: React.FC = () => {
     const fetchTasks = async () => {
       const toastId = toast.loading("処理中・・・・。");
       try {
-        const response = await fetch(`/api/task`);
+        const response = await fetch(`/api/task`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch task");
         }
