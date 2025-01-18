@@ -114,11 +114,7 @@ const ProfileForm: React.FC = () => {
   }
   return (
     <>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-      >
+      <Box component="form" onSubmit={handleSubmit}>
         <Input
           name="name"
           type="text"
