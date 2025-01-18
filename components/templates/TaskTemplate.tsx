@@ -1,11 +1,12 @@
 "use client";
 
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import TaskForm from "../molecules/TaskForm";
 import Header from "../organisms/Header";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
+import Loading from "@/app/loading";
 
 type TaskTemplateProps = {
   mode: "new" | "edit";
@@ -23,10 +24,10 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
   const [initialData, setInitialData] = useState<WorkContent | undefined>(
     undefined
   );
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      const toastId = toast.loading("処理中・・・・。");
       try {
         const response = await fetch(`/api/task`, {
           method: "GET",
@@ -57,20 +58,21 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
           error instanceof Error
             ? error.message
             : "不明なエラーが発生しました。";
-        toast.update(toastId, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
+        toast.error(errorMessage);
+        console.log(error);
       } finally {
-        toast.dismiss(toastId);
+        setLoading(false);
       }
     };
     fetchInitialData();
   }, [mode, taskId]);
-
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+        <Loading />
+      </Box>
+    );
+  }
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       {mode === "new" ? (

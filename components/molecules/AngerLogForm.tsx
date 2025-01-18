@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { checkAuth } from "@/api/auth";
 import { DateTime } from "luxon";
+import Loading from "@/app/loading";
 
 export type AngerLog = {
   id?: number;
@@ -36,6 +37,7 @@ type AngerLogFormProps = {
 const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
   const isEdit = mode === "edit";
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [tasks, setTasks] = useState<WorkContent[]>([]);
   const [categories, setCategories] = useState<
@@ -56,7 +58,6 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const toastId = toast.loading("カテゴリとコンテンツの取得中・・・・。");
       try {
         const response = await fetch(`/api/task`, {
           method: "GET",
@@ -88,25 +89,11 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
           }));
 
         setContents(initialContents);
-        toast.update(toastId, {
-          render: "カテゴリとコンテンツを取得しました",
-          type: "success",
-          isLoading: false,
-          autoClose: 1000,
-          closeOnClick: true,
-        });
       } catch (error) {
-        toast.update(toastId, {
-          render: "取得中にエラーが発生しました",
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
+        toast.error("取得中にエラーが発生しました");
         console.log(error);
       }
       if (mode === "edit" && angerId) {
-        const toastId = toast.loading("アンガーログ取得中・・・・。");
         try {
           const response = await fetch(
             `${baseUrl}/api/angerlog/detail?angerId=${angerId}`,
@@ -139,24 +126,11 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
             setSelectedCategory(task.category);
             handleCategoryChange(task.category);
           }
-          if (data) {
-            toast.update(toastId, {
-              render: "アンガーログを取得しました",
-              type: "success",
-              isLoading: false,
-              autoClose: 1000,
-              closeOnClick: true,
-            });
-          }
         } catch (error) {
-          toast.update(toastId, {
-            render: "取得中にエラーが発生しました",
-            type: "error",
-            isLoading: false,
-            autoClose: 5000,
-            closeOnClick: true,
-          });
+          toast.error("取得中にエラーが発生しました");
           console.log(error);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -297,7 +271,13 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
       console.log(error);
     }
   };
-
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+        <Loading />
+      </Box>
+    );
+  }
   return (
     <Box
       component="form"

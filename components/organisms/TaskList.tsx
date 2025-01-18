@@ -5,6 +5,7 @@ import TaskListItem from "./TaskListItem";
 import { Box, Button } from "@mui/material";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "@/app/loading";
 
 type Task = {
   id: number;
@@ -14,10 +15,10 @@ type Task = {
 
 const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const toastId = toast.loading("処理中・・・・。");
       try {
         const response = await fetch(`/api/task`, {
           method: "GET",
@@ -30,39 +31,27 @@ const TaskList: React.FC = () => {
         }
         const data = await response.json();
         setTasks(data || []);
-        if (data?.length === 0) {
-          toast.update(toastId, {
-            render: "作業内容が登録されていません。",
-            type: "info",
-            isLoading: false,
-            autoClose: 5000,
-            closeOnClick: true,
-          });
-        } else {
-          toast.update(toastId, {
-            render: "作業内容を取得しました。",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000,
-            closeOnClick: true,
-          });
-        }
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
             : "不明なエラーが発生しました。";
-        toast.update(toastId, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
+        toast.error(errorMessage);
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchTasks();
   }, []);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+        <Loading />
+      </Box>
+    );
+  }
 
   return (
     <Box>

@@ -18,6 +18,7 @@ import {
 } from "chart.js";
 import AngerLogIcon from "../atoms/AngerLogIcon";
 import { DateTime } from "luxon";
+import Loading from "@/app/loading";
 
 ChartJS.register(
   CategoryScale,
@@ -48,6 +49,7 @@ type CategoryData = {
   level: number;
 };
 const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [averageLevel, setAverageLevel] = useState(0);
   const [topCategories, setTopCategories] = useState<CategoryData[]>([]);
   const [lineChartData, setLineChartData] = useState({
@@ -72,9 +74,7 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   });
 
   useEffect(() => {
-    let toastId: string | number | undefined;
     const fetchChartLogs = async () => {
-      toastId = toast.loading("チャート情報取得中・・・・。");
       try {
         const params = new URLSearchParams(filter).toString();
         const response = await fetch(`${apiBase}/api/angerlog/chart?${params}`);
@@ -163,43 +163,29 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
               },
             ],
           });
-          toast.update(toastId, {
-            render: "アンガーログを取得しました。",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000,
-            closeOnClick: true,
-          });
-        } else {
-          toast.update(toastId, {
-            render: "アンガーログが登録されていません。",
-            type: "info",
-            isLoading: false,
-            autoClose: 5000,
-            closeOnClick: true,
-          });
         }
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
             : "不明なエラーが発生しました。";
-        toast.update(toastId, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
+        toast.error(errorMessage);
       } finally {
-        if (toastId && toast.isActive(toastId)) {
-          toast.dismiss(toastId);
-        }
+        setLoading(false);
       }
     };
 
     fetchChartLogs();
   }, [filter]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+        <Loading />
+      </Box>
+    );
+  }
+
   return (
     <Box>
       {averageLevel === 0 ? (

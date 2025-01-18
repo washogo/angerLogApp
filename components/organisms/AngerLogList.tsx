@@ -31,10 +31,7 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   const [logs, setLogs] = useState<AngerLog[]>([]);
 
   useEffect(() => {
-    let toastId: string | number | undefined;
-
     const fetchFilteredLogs = async () => {
-      toastId = toast.loading("リスト情報取得中・・・・。");
       try {
         const params = new URLSearchParams(filter).toString();
         const response = await fetch(`${apiBase}/api/angerlog?${params}`);
@@ -43,39 +40,13 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
         }
         const data = await response.json();
         setLogs(data);
-        if (data?.length === 0) {
-          toast.update(toastId, {
-            render: "アンガーログが登録されていません。",
-            type: "info",
-            isLoading: false,
-            autoClose: 5000,
-            closeOnClick: true,
-          });
-        } else {
-          toast.update(toastId, {
-            render: "アンガーログを取得しました。",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000,
-            closeOnClick: true,
-          });
-        }
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
             : "不明なエラーが発生しました。";
-        toast.update(toastId, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
-      } finally {
-        if (toastId && toast.isActive(toastId)) {
-          toast.dismiss(toastId);
-        }
+        toast.error(errorMessage);
+        console.log(error);
       }
     };
 

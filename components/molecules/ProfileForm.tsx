@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import Loading from "@/app/loading";
 
 type UserProfile = {
   name: string;
@@ -15,6 +16,8 @@ type UserProfile = {
 
 const ProfileForm: React.FC = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true);
+
   const [formData, setFormData] = useState<UserProfile>({
     name: "",
     email: "",
@@ -23,7 +26,6 @@ const ProfileForm: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const toastId = toast.loading("処理中・・・・。");
       try {
         const response = await fetch(`/api/user`, {
           method: "GET",
@@ -41,26 +43,16 @@ const ProfileForm: React.FC = () => {
             email: data.email || "",
             goal: data.goal || "",
           });
-          toast.update(toastId, {
-            render: "プロフィール情報を取得しました。",
-            type: "success",
-            isLoading: false,
-            autoClose: 1000,
-            closeOnClick: true,
-          });
         }
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
             : "不明なエラーが発生しました。";
-        toast.update(toastId, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-        });
+        toast.error(errorMessage);
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -113,7 +105,13 @@ const ProfileForm: React.FC = () => {
       });
     }
   };
-
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+        <Loading />
+      </Box>
+    );
+  }
   return (
     <>
       <Box
