@@ -202,23 +202,28 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   }, [filter]);
   return (
     <Box>
-      <Typography variant="h6" component="div">
-        平均: 怒りレベル {averageLevel.toFixed(2)}{" "}
-        <AngerLogIcon level={parseInt(averageLevel.toFixed(0))} />
-      </Typography>
-      <Line data={lineChartData} />
-      <Typography component="div" sx={{ mt: 2 }}>
-        {topCategories.map((cat, index) => (
-          <Box key={index} sx={{ mt: 2 }}>
-            <Typography variant="subtitle1" component="div">
-              {index + 1}位: {cat.content} 怒りレベル {cat.level}{" "}
-              <AngerLogIcon level={cat.level} />
-            </Typography>
-          </Box>
-        ))}
-      </Typography>
-
-      <Bar data={barChartData} />
+      {averageLevel === 0 ? (
+        <Box>対象のデータはありません。</Box>
+      ) : (
+        <>
+          <Typography variant="h6" component="div">
+            平均: 怒りレベル {averageLevel.toFixed(2)}{" "}
+            <AngerLogIcon level={parseInt(averageLevel.toFixed(0))} />
+          </Typography>
+          <Line data={lineChartData} />
+          <Typography component="div" sx={{ mt: 2 }}>
+            {topCategories.map((cat, index) => (
+              <Box key={index} sx={{ mt: 2 }}>
+                <Typography variant="subtitle1" component="div">
+                  {index + 1}位: {cat.content} 怒りレベル {cat.level}{" "}
+                  <AngerLogIcon level={cat.level} />
+                </Typography>
+              </Box>
+            ))}
+          </Typography>
+          <Bar data={barChartData} />
+        </>
+      )}
     </Box>
   );
 };

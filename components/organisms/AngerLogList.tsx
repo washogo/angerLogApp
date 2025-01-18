@@ -84,7 +84,11 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
 
   return (
     <Box>
-      <Typography variant="h6">アンガーログ一覧</Typography>
+      {logs.length === 0 ? (
+        <Box></Box>
+      ) : (
+        <Typography variant="h6">アンガーログ一覧</Typography>
+      )}
       {logs.map((log) => (
         <Link key={log.id} href={`/angerLog/edit/${log.id}`}>
           <Card sx={{ mb: 2 }}>
