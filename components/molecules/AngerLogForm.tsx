@@ -132,6 +132,8 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
         } finally {
           setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
     };
 
