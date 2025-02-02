@@ -1,6 +1,7 @@
 import prisma from "../../../../utils/prisma";
 import { NextResponse } from "next/server";
 import { checkAuth } from "@/api/auth";
+import { getDateRange } from "../../utils/dateUtils";
 
 export async function GET(request: Request) {
   const user = await checkAuth();
@@ -11,19 +12,15 @@ export async function GET(request: Request) {
   const day = searchParams.get("day");
   const type = searchParams.get("type");
 
-  let startDate, endDate;
-  if (type === "daily" && day) {
-    startDate = `${year}-${month}-${day} 00:00:00`;
-    endDate = `${year}-${month}-${day} 23:59:59`;
-  } else if (type === "monthly") {
-    startDate = `${year}-${month}-01 00:00:00`;
-    const lastDay = new Date(Number(year), Number(month), 0).getDate();
-    endDate = `${year}-${month}-${lastDay} 23:59:59`;
-  } else {
-    return NextResponse.json({ error: "無効な検索条件です" }, { status: 400 });
-  }
-
   try {
+    const dateRange = getDateRange(type, year, month, day);
+
+    if ("error" in dateRange) {
+      return NextResponse.json({ error: dateRange.error }, { status: 400 });
+    }
+
+    const { startDate, endDate } = dateRange;
+
     // 最大値を取得
     const aggregatedData = await prisma.angerRecord.groupBy({
       by: ["occurredDate"],
