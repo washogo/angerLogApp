@@ -37,7 +37,7 @@ type AngerLogFormProps = {
 const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
   const isEdit = mode === "edit";
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   const [tasks, setTasks] = useState<WorkContent[]>([]);
   const [categories, setCategories] = useState<

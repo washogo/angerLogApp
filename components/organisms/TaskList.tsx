@@ -15,7 +15,7 @@ type Task = {
 
 const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTasks = async () => {

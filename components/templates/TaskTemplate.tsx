@@ -24,7 +24,7 @@ const TaskTemplate = ({ mode, taskId }: TaskTemplateProps) => {
   const [initialData, setInitialData] = useState<WorkContent | undefined>(
     undefined
   );
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchInitialData = async () => {

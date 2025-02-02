@@ -16,7 +16,7 @@ type UserProfile = {
 
 const ProfileForm: React.FC = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState<UserProfile>({
     name: "",

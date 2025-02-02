@@ -49,7 +49,7 @@ type CategoryData = {
   level: number;
 };
 const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [averageLevel, setAverageLevel] = useState(0);
   const [topCategories, setTopCategories] = useState<CategoryData[]>([]);
   const [lineChartData, setLineChartData] = useState({
