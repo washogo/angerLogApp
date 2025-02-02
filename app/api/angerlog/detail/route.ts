@@ -18,6 +18,7 @@ export async function GET(request: Request) {
     }
     return NextResponse.json(record);
   } catch (error) {
-    return new Response("Internal Server Error", { status: 500 });
+    console.error("Error during POST request:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
