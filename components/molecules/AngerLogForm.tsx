@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { checkAuth } from "@/api/auth";
-import { DateTime } from "luxon";
 import Loading from "@/app/loading";
 
 export type AngerLog = {
@@ -31,10 +30,30 @@ type WorkContent = {
 type AngerLogFormProps = {
   mode: "new" | "edit";
   angerId?: number;
-  baseUrl?: string;
+  initTasksData?:
+    | {
+        id: number;
+        userId: string;
+        content: string;
+        category: string;
+      }[]
+    | null;
+  initAngerLogsData?: {
+    level: number;
+    workTypeId: number;
+    date: string;
+    time: string;
+    situation: string;
+    feeling: string;
+  } | null;
 };
 
-const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
+const AngerLogForm = ({
+  mode,
+  angerId,
+  initTasksData,
+  initAngerLogsData,
+}: AngerLogFormProps) => {
   const isEdit = mode === "edit";
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -58,79 +77,33 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      try {
-        const response = await fetch(`/api/task`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch task");
-        }
-        const fetchedTasks: WorkContent[] = await response.json();
+      setTasks(initTasksData!);
 
-        setTasks(fetchedTasks);
+      const uniqueCategories = Array.from(
+        new Set(initTasksData!.map((task: WorkContent) => task.category))
+      ).map((category: string) => ({ value: category, label: category }));
 
-        const uniqueCategories = Array.from(
-          new Set(fetchedTasks.map((task: WorkContent) => task.category))
-        ).map((category: string) => ({ value: category, label: category }));
+      setCategories(uniqueCategories);
 
-        setCategories(uniqueCategories);
+      const initialCategory = uniqueCategories[0]?.value || "";
+      setSelectedCategory(initialCategory);
 
-        const initialCategory = uniqueCategories[0]?.value || "";
-        setSelectedCategory(initialCategory);
+      const initialContents = initTasksData!
+        .filter((task: WorkContent) => task.category === initialCategory)
+        .map((task: WorkContent) => ({
+          value: task.id.toString(),
+          label: task.content,
+        }));
 
-        const initialContents = fetchedTasks
-          .filter((task: WorkContent) => task.category === initialCategory)
-          .map((task: WorkContent) => ({
-            value: task.id.toString(),
-            label: task.content,
-          }));
-
-        setContents(initialContents);
-      } catch (error) {
-        toast.error("取得中にエラーが発生しました");
-        console.log(error);
-      }
+      setContents(initialContents);
       if (mode === "edit" && angerId) {
-        try {
-          const response = await fetch(
-            `${baseUrl}/api/angerlog/detail?angerId=${angerId}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (!response.ok) {
-            console.log(response);
-            throw new Error("データ取得に失敗しました");
-          }
-          const data = await response.json();
-          const occurredDate = DateTime.fromISO(data.occurredDate, {
-            zone: "Asia/Tokyo",
-          });
-
-          setFormData({
-            level: data.level,
-            workTypeId: data.workTypeId,
-            date: occurredDate.toFormat("yyyy-MM-dd"),
-            time: occurredDate.toFormat("HH:mm"),
-            situation: data.situation || "",
-            feeling: data.feeling || "",
-          });
-          const task = tasks.find((task) => task.id === data.workTypeId);
-          if (task) {
-            setSelectedCategory(task.category);
-            handleCategoryChange(task.category);
-          }
-        } catch (error) {
-          toast.error("取得中にエラーが発生しました");
-          console.log(error);
-        } finally {
-          setLoading(false);
+        setFormData(initAngerLogsData!);
+        const task = tasks.find(
+          (task) => task.id === initAngerLogsData!.workTypeId
+        );
+        if (task) {
+          setSelectedCategory(task.category);
+          handleCategoryChange(task.category);
         }
       } else {
         setLoading(false);
@@ -138,7 +111,7 @@ const AngerLogForm = ({ mode, angerId, baseUrl }: AngerLogFormProps) => {
     };
 
     fetchTasks();
-  }, []);
+  }, [initTasksData, initAngerLogsData]);
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
