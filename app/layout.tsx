@@ -2,6 +2,7 @@ import "server-only";
 
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 export const metadata = {
   title: "アンガーログアプリ",
@@ -30,18 +31,20 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <html>
       <body>
-        <div className="flex flex-col min-h-screen">
-          <main className="flex-1 container max-w-screen-xl mx-auto">
-            <ToastContainer position="top-center" />
-            {children}
-          </main>
+        <AppRouterCacheProvider>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1 container max-w-screen-xl mx-auto">
+              <ToastContainer position="top-center" />
+              {children}
+            </main>
 
-          <footer className="py-5 border-t">
-            <div className="text-center text-sm text-gray-500">
-              Copyright © All rights reserved
-            </div>
-          </footer>
-        </div>
+            <footer className="py-5 border-t">
+              <div className="text-center text-sm text-gray-500">
+                Copyright © All rights reserved
+              </div>
+            </footer>
+          </div>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
