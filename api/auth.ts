@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
