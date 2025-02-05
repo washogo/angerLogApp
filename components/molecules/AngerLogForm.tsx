@@ -58,7 +58,6 @@ const AngerLogForm = ({
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
-  const [tasks, setTasks] = useState<WorkContent[]>([]);
   const [categories, setCategories] = useState<
     { value: string; label: string }[]
   >([]);
@@ -77,8 +76,6 @@ const AngerLogForm = ({
 
   useEffect(() => {
     const fetchTasks = async () => {
-      setTasks(initTasksData!);
-
       const uniqueCategories = Array.from(
         new Set(initTasksData!.map((task: WorkContent) => task.category))
       ).map((category: string) => ({ value: category, label: category }));
@@ -98,7 +95,7 @@ const AngerLogForm = ({
       setContents(initialContents);
       if (mode === "edit" && angerId) {
         setFormData(initAngerLogsData!);
-        const task = tasks.find(
+        const task = initTasksData!.find(
           (task) => task.id === initAngerLogsData!.workTypeId
         );
         if (task) {
@@ -117,7 +114,7 @@ const AngerLogForm = ({
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
 
-    const filteredContents = tasks
+    const filteredContents = initTasksData!
       .filter((task) => task.category === value)
       .map((task) => ({ value: task.id.toString(), label: task.content }));
     setContents(filteredContents);
