@@ -105,6 +105,7 @@ const AngerLogForm = ({
           setSelectedCategory(task.category);
           handleCategoryChange(task.category);
         }
+        setLoading(false);
       } else {
         setLoading(false);
       }
