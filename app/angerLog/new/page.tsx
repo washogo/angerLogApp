@@ -1,9 +1,7 @@
+import { fetchTaskData } from "@/app/api/utils/task";
 import Loading from "@/app/loading";
 import AngerLogTemplate from "@/components/templates/AngerLogTemplate";
 import { Box } from "@mui/material";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { fetchTaskData } from "../edit/[angerId]/page";
 
 type WorkContent = {
   id: number;
@@ -19,7 +17,6 @@ const AngerLogNewPage = async () => {
     initTasksData = await fetchTaskData();
   } catch (error) {
     console.error(error);
-    toast.error("データの取得に失敗しました" + (error as Error).message);
   }
 
   if (!initTasksData) {

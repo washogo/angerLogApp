@@ -1,10 +1,9 @@
+import { fetchTaskData } from "@/app/api/utils/task";
 import Loading from "@/app/loading";
 import AngerLogTemplate from "@/components/templates/AngerLogTemplate";
 import getApiBase from "@/utils/apibase";
 import { Box } from "@mui/material";
 import { DateTime } from "luxon";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 type PageProps = {
   params: Promise<{
@@ -24,12 +23,6 @@ type AngerLogData = {
   time: string;
   situation: string;
   feeling: string;
-};
-
-export const fetchTaskData = async () => {
-  const res = await import("../../../api/task/route");
-  const fetchedTasks = (await (await res.GET()).json()) as WorkContent[];
-  return fetchedTasks;
 };
 
 const fetchAngerLogData = async (
@@ -66,7 +59,6 @@ const AngerLogEditPage = async ({ params }: PageProps) => {
     initAngerLogsData = await fetchAngerLogData(angerId, apiBase);
   } catch (error) {
     console.error(error);
-    toast.error("データの取得に失敗しました" + (error as Error).message);
   }
 
   if (!initTasksData || !initAngerLogsData) {
