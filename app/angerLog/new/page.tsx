@@ -29,5 +29,5 @@ const AngerLogNewPage = async () => {
 
   return <AngerLogTemplate mode="new" initTasksData={initTasksData} />;
 };
-
+export const dynamic = "force-dynamic";
 export default AngerLogNewPage;

@@ -19,5 +19,5 @@ const TaskNewPage = async () => {
   }
   return <TaskTempalte mode="new" initialCategories={initialCategories} />;
 };
-
+export const dynamic = "force-dynamic";
 export default TaskNewPage;
