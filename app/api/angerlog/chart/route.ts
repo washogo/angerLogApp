@@ -3,22 +3,32 @@ import { NextResponse } from "next/server";
 import { checkAuth } from "@/api/auth";
 import { getDateRange } from "../../utils/dateUtils";
 
+/**
+ * アンガーログのチャートデータを取得するAPI
+ * @param request リクエスト
+ * @returns アンガーログのチャートデータ　最大値、平均値、カテゴリトップ5
+ */
 export async function GET(request: Request) {
+  // ユーザ認証
   const user = await checkAuth();
   const userId = user.id;
+  // パラメータ取得
   const { searchParams } = new URL(request.url);
   const year = searchParams.get("year");
   const month = searchParams.get("month");
   const day = searchParams.get("day");
-  const type = searchParams.get("type");
+  const type = searchParams.get("type") as "daily" | "monthly";
 
   try {
+    if (type !== "daily" && type !== "monthly") {
+      return NextResponse.json({ error: "Invalid type parameter" }, { status: 400 });
+    }
+    // 日付範囲取得
     const dateRange = getDateRange(type, year, month, day);
 
     if ("error" in dateRange) {
       return NextResponse.json({ error: dateRange.error }, { status: 400 });
     }
-
     const { startDate, endDate } = dateRange;
 
     // 最大値を取得
@@ -73,6 +83,7 @@ export async function GET(request: Request) {
       take: 5,
     });
 
+    // 作業内容データ取得
     const categoryData = await Promise.all(
       topCategories.map(async (item) => {
         const workContent = await prisma.workContent.findUnique({

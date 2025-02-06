@@ -14,7 +14,11 @@ type ButtonProps = {
     | "info"
     | "warning";
 };
-
+/**
+ * ボタンコンポーネント
+ * @param param0 クリック時の処理　ボタンの種類　ボタンの色
+ * @returns ボタン
+ */
 const CustomButton: React.FC<ButtonProps> = ({
   children,
   onClick,

@@ -48,6 +48,11 @@ type CategoryData = {
   content: string;
   level: number;
 };
+/**
+ * アンガーログチャート
+ * @param param 対象のデータ　ベースURL
+ * @returns アンガーログチャート
+ */
 const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   const [loading, setLoading] = useState(true);
   const [averageLevel, setAverageLevel] = useState(0);
@@ -77,6 +82,7 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
     const fetchChartLogs = async () => {
       try {
         const params = new URLSearchParams(filter).toString();
+        // チャート情報取得
         const response = await fetch(`${apiBase}/api/angerlog/chart?${params}`);
         if (!response.ok) {
           throw new Error("Failed to fetch anger logs");
@@ -87,8 +93,10 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
           setTopCategories(data.categoryData);
           const labels = [];
           const dataPoints = [];
+          // 日次の場合
           if (filter.type === "daily") {
             for (let hour = 0; hour < 24; hour++) {
+              // 時間単位で最大値取得
               const maxLevel = data.aggregatedData
                 .filter(
                   (record: AngerRecord) =>
@@ -111,6 +119,7 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
               0
             ).getDate();
             for (let day = 1; day <= daysInMonth; day++) {
+              // 日付単位で最大値取得
               const maxLevel = data.aggregatedData
                 .filter(
                   (record: AngerRecord) =>
@@ -140,9 +149,11 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
               },
             ],
           });
+          // カテゴリごとのコンテンツ取得
           const barLabels = data.categoryData.map(
             (cat: CategoryData) => cat.content
           );
+          // カテゴリごとのレベル取得
           const barDataPoints = data.categoryData.map(
             (cat: CategoryData) => cat.level
           );
@@ -177,7 +188,7 @@ const AngerChart: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
 
     fetchChartLogs();
   }, [filter]);
-
+  // ローディング判定
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>

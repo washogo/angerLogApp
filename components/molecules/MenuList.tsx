@@ -14,7 +14,10 @@ const menuItems = [
   { label: "プロフィール変更", link: "/auth/profile" },
   { label: "ログアウト", link: "/auth/login" },
 ];
-
+/**
+ * サブメニューリストエリア
+ * @returns サブメニューリスト
+ */
 const MenuList: React.FC = () => (
   <List>
     {menuItems.map((item) => (

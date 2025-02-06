@@ -6,7 +6,11 @@ type TaskListItemProps = {
   category: string;
   content: string;
 };
-
+/**
+ * 作業内容のアイテム
+ * @param param id: 作業内容ID, category: カテゴリ, content: 作業内容
+ * @returns 作業内容アイテム
+ */
 const TaskListItem: React.FC<TaskListItemProps> = ({
   id,
   category,

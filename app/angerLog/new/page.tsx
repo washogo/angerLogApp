@@ -10,15 +10,21 @@ type WorkContent = {
   category: string;
 };
 
+/**
+ * アンガーログ新規作成ページ
+ * @returns アンガーログ新規作成ページ
+ */
 const AngerLogNewPage = async () => {
   let initTasksData: WorkContent[] | undefined;
 
   try {
+    // タスクデータ取得
     initTasksData = await fetchTaskData();
   } catch (error) {
     console.error(error);
   }
 
+  // ローディング判定
   if (!initTasksData) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>

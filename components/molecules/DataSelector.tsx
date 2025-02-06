@@ -21,7 +21,11 @@ type DataSelectorProps = {
   filter: Filter;
   onFilter: (filter: Filter) => void;
 };
-
+/**
+ * 日付に紐づくデータ抽出エリアコンポーネント
+ * @param param フィルター　フィルター変更時の処理
+ * @returns 日付に紐づくデータ抽出エリア
+ */
 const DataSelector: React.FC<DataSelectorProps> = ({ filter, onFilter }) => {
   const [viewType, setViewType] = useState<"daily" | "monthly">(filter.type);
   const [year, setYear] = useState(filter.year);
@@ -29,6 +33,7 @@ const DataSelector: React.FC<DataSelectorProps> = ({ filter, onFilter }) => {
   const [day, setDay] = useState(filter.day);
   const [error, setError] = useState<string | null>(null);
 
+  // 日付の妥当性チェック
   const isValidDate = (y: string, m: string, d?: string) => {
     if (!d) return true;
     const date = new Date(`${y}-${m}-${d}`);
@@ -38,14 +43,14 @@ const DataSelector: React.FC<DataSelectorProps> = ({ filter, onFilter }) => {
       date.getDate().toString().padStart(2, "0") === d
     );
   };
-
+  // 表示ボタン処理
   const handleFilter = () => {
     if (!isValidDate(year, month, day)) {
       setError("無効な日付が選択されています。");
       return;
     }
     setError(null);
-
+    // 絞り込み条件の設定
     const filter = {
       type: viewType,
       year,

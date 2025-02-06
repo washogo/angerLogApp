@@ -1,5 +1,12 @@
-
-export function getDateRange(type: string | null, year: string | null, month: string | null, day: string | null):
+/**
+ * 日付処理のユーティリティ
+ * @param type "daily" | "monthly"
+ * @param year 年
+ * @param month 月
+ * @param day 日
+ * @returns 開始日と終了日　または エラーメッセージ
+ */
+export function getDateRange(type: "daily" | "monthly", year: string | null, month: string | null, day: string | null):
   | { startDate: string; endDate: string }
   | { error: string } {
   if (!year || !month || (type === "daily" && !day)) {

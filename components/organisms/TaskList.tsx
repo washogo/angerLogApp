@@ -13,6 +13,10 @@ type Task = {
   content: string;
 };
 
+/**
+ * 作業内容一覧
+ * @returns 作業内容一覧
+ */
 const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +24,7 @@ const TaskList: React.FC = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
+        // 作業内容データ取得
         const response = await fetch(`/api/task`, {
           method: "GET",
           headers: {
@@ -44,7 +49,7 @@ const TaskList: React.FC = () => {
     };
     fetchTasks();
   }, []);
-
+  // ローディング判定
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>

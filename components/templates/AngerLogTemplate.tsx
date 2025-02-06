@@ -23,6 +23,11 @@ type AngerLogTemplateProps = {
   } | null;
 };
 
+/**
+ * アンガーログテンプレート
+ * @param param mode: モード, angerId: アンガーログID, initTasksData: タスクデータ, initAngerLogsData: アンガーログデータ
+ * @returns アンガーログテンプレート
+ */
 const AngerLogTemplate = ({
   mode,
   angerId,

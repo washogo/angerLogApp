@@ -14,6 +14,11 @@ type AngerLogIconProp = {
   level: number;
 };
 
+/**
+ * アンガーログのレベルアイコン
+ * @param param0 レベル
+ * @returns アンガーログのレベルアイコン
+ */
 const AngerLogIcon = ({ level }: AngerLogIconProp) => {
   const levelInfo = levelIcons.find((icon) => icon.value === level);
   const label = levelInfo ? levelInfo.label : ``;

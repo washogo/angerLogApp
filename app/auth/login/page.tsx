@@ -1,7 +1,10 @@
 import LoginCard from "@/components/organisms/LoginCard";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-
+/**
+ * ログインページ
+ * @returns ログインページ
+ */
 const LoginPage = () => {
   return (
     <>

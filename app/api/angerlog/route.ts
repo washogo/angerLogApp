@@ -3,11 +3,16 @@ import { NextResponse } from "next/server";
 import { checkAuth } from "@/api/auth";
 import { getDateRange } from "../utils/dateUtils";
 
+/**
+ * アンガーログのデータを登録するAPI
+ * @param request リクエスト
+ * @returns アンガーログデータ
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { userId, level, workTypeId, occurredDate, situation, feeling } = body;
-
+    // アンガーログデータ登録
     const record = await prisma.angerRecord.create({
       data: {
         userId,
@@ -25,11 +30,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+/**
+ * アンガーログのデータを更新するAPI
+ * @param request リクエスト
+ * @returns アンガーログデータ
+ */
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
     const { id, level, workTypeId, occurredDate, situation, feeling } = body;
-
+    // アンガーログデータ更新
     const record = await prisma.angerRecord.update({
       where: { id },
       data: {
@@ -47,16 +57,27 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+/**
+ * アンガーログのデータを取得するAPI
+ * @param request リクエスト
+ * @returns アンガーログデータ
+ */
 export async function GET(request: Request) {
+  // ユーザ認証
   const user = await checkAuth();
   const userId = user.id;
+  // パラメータ取得
   const { searchParams } = new URL(request.url);
   const year = searchParams.get("year");
   const month = searchParams.get("month");
   const day = searchParams.get("day");
-  const type = searchParams.get("type");
+  const type = searchParams.get("type") as "daily" | "monthly";
 
   try {
+    if (type !== "daily" && type !== "monthly") {
+      return NextResponse.json({ error: "Invalid type parameter" }, { status: 400 });
+    }
+    // 日付範囲取得
     const dateRange = getDateRange(type, year, month, day);
 
     if ("error" in dateRange) {
@@ -64,6 +85,7 @@ export async function GET(request: Request) {
     }
 
     const { startDate, endDate } = dateRange;
+    // アンガーログデータ取得
     const angerLogs = await prisma.angerRecord.findMany({
       where: {
         userId,

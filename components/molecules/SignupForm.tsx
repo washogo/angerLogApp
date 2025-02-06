@@ -9,6 +9,11 @@ type SignUpFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
+/**
+ * サインアップフォーム
+ * @param param サインアップ時の処理
+ * @returns サインアップフォーム
+ */
 const SignupForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,8 +25,10 @@ const SignupForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
     password: false,
   });
 
+  // フォーム送信時の処理
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // バリエーションチェック
     const newErrors = {
       name: !name,
       email: !email,

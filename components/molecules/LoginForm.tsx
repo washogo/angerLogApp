@@ -7,13 +7,18 @@ import { Box } from "@mui/material";
 type LoginFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
-
+/**
+ * ログインフォーム
+ * @param param ログイン時の処理
+ * @returns ログインフォーム
+ */
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ email: false, password: false });
 
+  // フォーム送信時の処理
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

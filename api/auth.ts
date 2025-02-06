@@ -4,7 +4,10 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+/**
+ * ログイン用のAPI
+ * @param formData メールアドレスとパスワードのフォームデータ
+ */
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
@@ -13,6 +16,7 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
+  // ログイン処理
   const { error } = await supabase.auth.signInWithPassword(inputData);
 
   if (error) {
@@ -21,6 +25,10 @@ export async function login(formData: FormData) {
   }
 }
 
+/**
+ * サインアップ用のAPI
+ * @param formData メールアドレス、パスワード、名前のフォームデータ
+ */
 export async function signup(formData: FormData) {
   const supabase = await createClient();
 
@@ -29,7 +37,7 @@ export async function signup(formData: FormData) {
     password: formData.get("password") as string,
     name: formData.get("name") as string,
   };
-
+  // サインアップ処理
   const { data, error } = await supabase.auth.signUp(inputData);
 
   if (error) {
@@ -38,6 +46,7 @@ export async function signup(formData: FormData) {
   }
   const userId = data.user?.id;
   if (userId) {
+    // カスタムユーザ登録
     const { error } = await supabase.from("User").insert([
       {
         id: userId,
@@ -52,6 +61,9 @@ export async function signup(formData: FormData) {
     }
   }
 }
+/**
+ * 認証ユーザー確認用のAPI
+ */
 export const checkAuth = async () => {
   const supabase = await createClient();
   const {
@@ -66,6 +78,11 @@ export const checkAuth = async () => {
 
   return user;
 };
+/**
+ * エラーメッセージの翻訳
+ * @param errorMessage エラーメッセージ
+ * @returns 変換後のエラーメッセージ
+ */
 const translateError = (errorMessage: string) => {
   const errorTranslations: { [index: string]: string } = {
     "email rate limit exceeded":

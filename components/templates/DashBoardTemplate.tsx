@@ -16,6 +16,11 @@ type Filter = {
 };
 const today = new Date();
 
+/**
+ * ダッシュボードテンプレート
+ * @param param ベースURL
+ * @returns ダッシュボードテンプレート
+ */
 const DashboardTemplate = ({ apiBase }: { apiBase: string }) => {
   const [filter, setFilter] = useState<Filter>({
     type: "monthly",

@@ -18,7 +18,11 @@ type TaskFormProps = {
     content: string;
   };
 };
-
+/**
+ * 作業内容フォーム
+ * @param param mode: new | edit taskId: 作業ID initialCategories: カテゴリ一覧 initialData: 作業内容データ
+ * @returns 作業内容フォーム
+ */
 const TaskForm: React.FC<TaskFormProps> = ({
   mode,
   taskId,
@@ -35,9 +39,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
     setContent(initialData?.content || "");
   }, [initialData]);
 
+  // フォーム送信時の処理
   const handleSubmit = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
+      // 既存カテゴリとの重複チェック
       const response = await fetch(`/api/task/detail`, {
         method: "POST",
         headers: {
@@ -63,7 +69,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
         });
         return;
       }
-
+      // 作業内容登録
       const createRes = await fetch(`/api/task`, {
         method: "POST",
         headers: {
@@ -86,6 +92,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
         autoClose: 5000,
         closeOnClick: true,
       });
+      // 作業内容一覧に遷移
       router.push(`/tasks`);
       router.refresh();
     } catch (error) {
@@ -99,10 +106,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
       console.log(error);
     }
   };
-
+  // 更新処理
   const handleUpdate = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
+      // 作業内容更新
       const response = await fetch(`/api/task`, {
         method: "PUT",
         headers: {
@@ -126,6 +134,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
         autoClose: 5000,
         closeOnClick: true,
       });
+      // 作業内容一覧に遷移
       router.push(`/tasks`);
       router.refresh();
     } catch (error) {
@@ -139,10 +148,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
       console.log(error);
     }
   };
-
+  // 削除処理
   const handleDelete = async () => {
     const toastId = toast.loading("処理中・・・・。");
     try {
+      // 作業内容削除
       const response = await fetch(`/api/task`, {
         method: "DELETE",
         headers: {
@@ -165,6 +175,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
         autoClose: 5000,
         closeOnClick: true,
       });
+      // 作業内容一覧に遷移
       router.push(`/tasks`);
       router.refresh();
     } catch (error) {

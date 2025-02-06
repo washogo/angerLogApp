@@ -2,6 +2,10 @@ import ProfileForm from "../molecules/ProfileForm";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
+/**
+ * プロフィールカード
+ * @returns プロフィールカード
+ */
 const ProfileCard: React.FC = () => (
   <Box
     sx={{

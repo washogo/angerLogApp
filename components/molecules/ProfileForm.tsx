@@ -14,6 +14,10 @@ type UserProfile = {
   goal: string;
 };
 
+/**
+ * プロフィールフォーム
+ * @returns プロフィールフォーム
+ */
 const ProfileForm: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -27,6 +31,7 @@ const ProfileForm: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        // ユーザ情報取得
         const response = await fetch(`/api/user`, {
           method: "GET",
           headers: {
@@ -58,16 +63,17 @@ const ProfileForm: React.FC = () => {
 
     fetchUserData();
   }, []);
-
+  // フォームの変更
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  // 保存処理
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const toastId = toast.loading("処理中・・・・。");
     try {
+      // ユーザー更新
       const response = await fetch(`/api/user`, {
         method: "PUT",
         headers: {
@@ -91,6 +97,7 @@ const ProfileForm: React.FC = () => {
         autoClose: 5000,
         closeOnClick: true,
       });
+      // ダッシュボードに遷移
       router.push(`/dashboard`);
       router.refresh();
     } catch (error) {
@@ -105,6 +112,7 @@ const ProfileForm: React.FC = () => {
       });
     }
   };
+  // ローディング判定
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>

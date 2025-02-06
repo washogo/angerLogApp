@@ -23,6 +23,11 @@ type InputProps = {
   onTogglePassword?: () => void;
 };
 
+/**
+ * 入力フォームコンポーネント
+ * @param param ラベル　名前　タイプ　プレースホルダ　複数行　行数　値　変更時の処理　エラー　ヘルパーテキスト　パスワード表示　パスワード表示切替
+ * @returns 入力フォーム
+ */
 const Input: React.FC<InputProps> = ({
   name,
   type,

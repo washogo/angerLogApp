@@ -9,13 +9,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { signup } from "@/api/auth";
 import { redirect } from "next/navigation";
 
+/**
+ * サインアップカード
+ * @returns サインアップカード
+ */
 const SignupCard: React.FC = () => {
+  // サインアップ処理
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     const toastId = toast.loading("処理中・・・・。");
     const formData = new FormData(e.currentTarget);
     let msg = "サインアップに成功しました。";
     let errorFlg = false;
     try {
+      // サインアップ処理
       await signup(formData);
     } catch (error) {
       if (error instanceof Error) {

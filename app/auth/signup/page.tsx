@@ -2,6 +2,10 @@ import SignupCard from "@/components/organisms/SignupCard";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
+/**
+ * サインアップページ
+ * @returns サインアップページ
+ */
 const SignupPage = () => {
   return (
     <>

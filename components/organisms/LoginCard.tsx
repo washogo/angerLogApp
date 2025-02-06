@@ -13,12 +13,14 @@ import { redirect } from "next/navigation";
  * ログインカード
  */
 const LoginCard: React.FC = () => {
+  // ログイン処理
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     const toastId = toast.loading("処理中・・・・。");
     const formData = new FormData(e.currentTarget);
     let msg = "ログインに成功しました。";
     let errorFlg = false;
     try {
+      // ログイン処理
       await login(formData);
     } catch (error) {
       if (error instanceof Error) {
@@ -46,6 +48,7 @@ const LoginCard: React.FC = () => {
         closeOnClick: true,
       });
     }
+    // ダッシュボードに遷移
     redirect("/dashboard");
   };
 

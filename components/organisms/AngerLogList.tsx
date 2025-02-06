@@ -27,6 +27,11 @@ type AngerLogListProps = {
   };
   apiBase: string;
 };
+/**
+ * アンガーログリスト
+ * @param param  対象のデータ　ベースURL
+ * @returns アンガーログリスト
+ */
 const AngerLogList: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
   const [logs, setLogs] = useState<AngerLog[]>([]);
 
@@ -34,6 +39,7 @@ const AngerLogList: React.FC<AngerLogListProps> = ({ filter, apiBase }) => {
     const fetchFilteredLogs = async () => {
       try {
         const params = new URLSearchParams(filter).toString();
+        // アンガーログ取得
         const response = await fetch(`${apiBase}/api/angerlog?${params}`);
         if (!response.ok) {
           throw new Error("Failed to fetch anger logs");

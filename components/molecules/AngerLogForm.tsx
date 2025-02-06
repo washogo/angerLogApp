@@ -48,6 +48,11 @@ type AngerLogFormProps = {
   } | null;
 };
 
+/**
+ * アンガーログフォーム
+ * @param param モード：new edit　アンガーログID　作業内容データ　アンガーログデータ
+ * @returns アンガーログフォーム
+ */
 const AngerLogForm = ({
   mode,
   angerId,
@@ -76,6 +81,7 @@ const AngerLogForm = ({
 
   useEffect(() => {
     const fetchTasks = async () => {
+      // 作業内容データのカテゴリを一意にする
       const uniqueCategories = Array.from(
         new Set(initTasksData!.map((task: WorkContent) => task.category))
       ).map((category: string) => ({ value: category, label: category }));
@@ -85,6 +91,7 @@ const AngerLogForm = ({
       const initialCategory = uniqueCategories[0]?.value || "";
       setSelectedCategory(initialCategory);
 
+      // カテゴリに紐づくコンテンツを取得
       const initialContents = initTasksData!
         .filter((task: WorkContent) => task.category === initialCategory)
         .map((task: WorkContent) => ({
@@ -93,12 +100,15 @@ const AngerLogForm = ({
         }));
 
       setContents(initialContents);
+      // 編集モードの場合
       if (mode === "edit" && angerId) {
         setFormData(initAngerLogsData!);
+        // カテゴリを選択
         const task = initTasksData!.find(
           (task) => task.id === initAngerLogsData!.workTypeId
         );
         if (task) {
+          // コンテンツ変更
           setSelectedCategory(task.category);
           handleCategoryChange(task.category);
         }
@@ -110,7 +120,7 @@ const AngerLogForm = ({
 
     fetchTasks();
   }, [initTasksData, initAngerLogsData]);
-
+  // カテゴリ変更時の処理
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
 
@@ -119,13 +129,13 @@ const AngerLogForm = ({
       .map((task) => ({ value: task.id.toString(), label: task.content }));
     setContents(filteredContents);
   };
-
+  // フォームの変更時の処理
   const handleChange =
     (key: keyof AngerLog) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFormData({ ...formData, [key]: e.target.value });
     };
-
+  //  フォームのバリデーション
   const validateForm = () => {
     if (!formData.level) return "怒りレベルを選択してください。";
     if (!selectedCategory) return "カテゴリを選択してください。";
@@ -136,7 +146,7 @@ const AngerLogForm = ({
     if (!formData.feeling) return "気持ちを入力してください。";
     return null;
   };
-
+  // 登録処理
   const handleInsert = async () => {
     const error = validateForm();
     if (error) {
@@ -146,7 +156,9 @@ const AngerLogForm = ({
     const toastId = toast.loading("処理中・・・・。");
 
     try {
+      // ユーザー認証
       const user = await checkAuth();
+      // アンガーログ登録
       const response = await fetch(`/api/angerlog`, {
         method: "POST",
         headers: {
@@ -173,6 +185,7 @@ const AngerLogForm = ({
         autoClose: 5000,
         closeOnClick: true,
       });
+      // ダッシュボードに遷移
       router.push(`/dashboard`);
       router.refresh();
     } catch (error) {
@@ -186,16 +199,19 @@ const AngerLogForm = ({
       console.log(error);
     }
   };
-
+  // 登録／更新処理
   const handleSubmit = async () => {
     if (mode === "edit" && angerId) {
+      // 更新処理
       handleUpdate();
     } else {
+      // 登録処理
       handleInsert();
     }
   };
-
+  // 更新処理
   const handleUpdate = async () => {
+    // フォームのバリデーション
     const error = validateForm();
     if (error) {
       toast.error(error);
@@ -205,6 +221,7 @@ const AngerLogForm = ({
 
     try {
       if (!angerId) throw new Error("IDが存在しません。");
+      // アンガーログ更新
       const response = await fetch(`/api/angerlog`, {
         method: "PUT",
         headers: {
@@ -231,6 +248,7 @@ const AngerLogForm = ({
         autoClose: 5000,
         closeOnClick: true,
       });
+      // ダッシュボードに遷移
       router.push(`/dashboard`);
       router.refresh();
     } catch (error) {
@@ -244,6 +262,7 @@ const AngerLogForm = ({
       console.log(error);
     }
   };
+  // ローディング中
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>

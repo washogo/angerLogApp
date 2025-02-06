@@ -25,16 +25,24 @@ type AngerLogData = {
   feeling: string;
 };
 
+/**
+ * アンガーログのデータを取得するAPI
+ * @param angerId アンガーログID
+ * @param baseUrl ベースURL
+ * @returns アンガーログデータ
+ */
 const fetchAngerLogData = async (
   angerId: number,
   baseUrl: string
 ): Promise<AngerLogData> => {
+  // アンガーログのデータ取得
   const response = await fetch(
     `${baseUrl}/api/angerlog/detail?angerId=${angerId}`
   );
   if (!response.ok) throw new Error("データ取得に失敗しました");
 
   const data = await response.json();
+  // 日付を整形
   const occurredDate = DateTime.fromISO(data.occurredDate, {
     zone: "Asia/Tokyo",
   });
@@ -48,19 +56,27 @@ const fetchAngerLogData = async (
   };
 };
 
+/**
+ * アンガーログ編集ページ
+ * @param param0 ページパラメータ
+ * @returns アンガーログ編集ページ
+ */
 const AngerLogEditPage = async ({ params }: PageProps) => {
+  // アンガーログIDを取得
   const angerId = parseInt((await params).angerId);
 
   let initTasksData: WorkContent[] | undefined;
   let initAngerLogsData: AngerLogData | undefined;
   try {
     const apiBase = await getApiBase();
+    // タスクデータとアンガーログデータを取得
     initTasksData = await fetchTaskData();
     initAngerLogsData = await fetchAngerLogData(angerId, apiBase);
   } catch (error) {
     console.error(error);
   }
 
+  // ローディング判定
   if (!initTasksData || !initAngerLogsData) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>

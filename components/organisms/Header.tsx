@@ -14,6 +14,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuList from "../molecules/MenuList";
 import Link from "next/link";
 
+/**
+ * ヘッダー
+ * @param param title: タイトル
+ * @returns ヘッダー
+ */
 const Header: React.FC<{ title: string }> = ({ title }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
