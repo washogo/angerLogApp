@@ -1,11 +1,11 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "goal" TEXT,
-    "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -13,11 +13,11 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "AngerRecord" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "level" INTEGER NOT NULL,
     "situation" TEXT,
     "feeling" TEXT,
-    "occurredDate" TIMESTAMPTZ NOT NULL,
+    "occurredDate" TIMESTAMP NOT NULL,
     "workTypeId" INTEGER NOT NULL,
 
     CONSTRAINT "AngerRecord_pkey" PRIMARY KEY ("id")
@@ -26,7 +26,7 @@ CREATE TABLE "AngerRecord" (
 -- CreateTable
 CREATE TABLE "WorkContent" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "category" TEXT NOT NULL,
 

@@ -20,7 +20,7 @@ model User {
   email        String        @unique
   password     String
   goal         String?
-  createdAt    DateTime      @default(now()) @db.Timestamptz()
+  createdAt    DateTime      @default(now()) @db.Timestamp()
   angerRecords AngerRecord[]
   workContents WorkContent[]
 
@@ -35,7 +35,7 @@ model AngerRecord {
   level        Int
   situation    String?
   feeling      String?
-  occurredDate DateTime    @db.Timestamptz()
+  occurredDate DateTime    @db.Timestamp()
   workType     WorkContent @relation(fields: [workTypeId], references: [id])
   workTypeId   Int
 
