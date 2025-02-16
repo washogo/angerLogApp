@@ -12,6 +12,8 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { userId, level, workTypeId, occurredDate, situation, feeling } = body;
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log("Route Handlerのタイムゾーン: ", userTimeZone, new Date(occurredDate));
     // アンガーログデータ登録
     const record = await prisma.angerRecord.create({
       data: {
