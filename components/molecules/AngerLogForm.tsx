@@ -158,6 +158,7 @@ const AngerLogForm = ({
     try {
       // ユーザー認証
       const user = await checkAuth();
+      const occurredDateWithTimeZone = new Date(`${formData.date}T${formData.time}`);
       // アンガーログ登録
       const response = await fetch(`/api/angerlog`, {
         method: "POST",
@@ -168,7 +169,7 @@ const AngerLogForm = ({
           userId: user.id,
           level: formData.level,
           workTypeId: formData.workTypeId,
-          occurredDate: `${formData.date}T${formData.time}`,
+          occurredDate: occurredDateWithTimeZone,
           situation: formData.situation,
           feeling: formData.feeling,
         }),
@@ -221,6 +222,7 @@ const AngerLogForm = ({
 
     try {
       if (!angerId) throw new Error("IDが存在しません。");
+      const occurredDateWithTimeZone = new Date(`${formData.date}T${formData.time}`);
       // アンガーログ更新
       const response = await fetch(`/api/angerlog`, {
         method: "PUT",
@@ -231,7 +233,7 @@ const AngerLogForm = ({
           id: angerId,
           level: formData.level,
           workTypeId: formData.workTypeId,
-          occurredDate: `${formData.date}T${formData.time}`,
+          occurredDate: occurredDateWithTimeZone,
           situation: formData.situation,
           feeling: formData.feeling,
         }),
